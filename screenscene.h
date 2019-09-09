@@ -13,7 +13,7 @@ class ScreenScene : public QGraphicsScene{
     QPointF     previousPoint;
     QGraphicsLineItem * horizontalLine;
     QGraphicsLineItem * verticalLine;
-    QGraphicsRectItem *rectCentr;
+    QGraphicsItem *rectCentr;
     QGraphicsRectItem * rectIteam[8];
 public:
     ScreenScene();

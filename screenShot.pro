@@ -28,12 +28,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     screenscene.cpp \
-    panel.cpp
+    panel.cpp \
+    curtain.cpp
 
 HEADERS += \
         mainwindow.h \
     screenscene.h \
-    panel.h
+    panel.h \
+    curtain.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
