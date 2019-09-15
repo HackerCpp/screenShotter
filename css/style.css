@@ -1,0 +1,122 @@
+/*Меню панели приборов*/
+QSlider#sliderColor::groove:horizontal {
+     border: 1 solid black; 	 
+     height: 10px ;
+	 border-radius: 10px 5px 0 5px;	 
+     background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+  stop: 0 #FF0000, 
+  stop: 0.15 #FFA500,
+  stop: 0.3 #FFFF00,
+  stop: 0.45 #008000,
+  stop: 0.6 #00FFFF,
+  stop: 0.75 #0000FF,
+  stop: 1 #FF00FF);
+     margin: 100px 0;
+	 cursor: help;
+ }
+ QSlider#sliderColor::handle:horizontal {
+     background: transparent;
+     border: 7px solid white;
+     width: 9px;
+     margin: -8 0; 
+     border-radius: 7px;
+ }
+ QSlider{
+	height: 40px ; 
+ }
+ men{
+	background: transparent; 
+ }
+ QWidget#UpWidget{
+	 background: transparent; 
+ }
+ QWidget#DownWidget{
+	 border: 1 solid black; 
+	 border-radius: 7px;
+	background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+  stop: 0 #191970, 
+  stop: 1 #000000);
+ 
+  
+ }
+ QWidget#LeftBtns{
+	 border:  1 solid black;
+	 border-radius: 10px;
+	 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+  stop: 0 #808080, 
+  stop: 1 #C0C0C0);
+ }
+ QWidget#RightBtns{
+	 border:  1 solid black;
+	 border-radius: 10px;
+	 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+  stop: 0 #808080, 
+  stop: 1 #C0C0C0);
+ }
+/*QPushButton#qwit{
+	border: 1 solid black; 
+	background-image: url(pict/del.png);
+}*/QPushButton#qwit{
+	border-image: url(pict/del.png)0 0 0 0 stretch stretch;
+	border: 1 solid black; 	 
+	 border-radius: 1px;	 
+}
+QPushButton#qwit::hover{
+	border-image: url(pict/x2.png)0 0 0 0 stretch stretch;
+	border: 1 solid black; 	 
+	 border-radius: 3px;
+}
+QPushButton#enter0{
+	border-image: url(pict/3.png)0 0 0 0 stretch stretch;
+}
+QPushButton#enter1{
+	border-image: url(pict/4.png)0 0 0 0 stretch stretch;
+}
+QPushButton#enter2{
+	border-image: url(pict/5.png)0 0 0 0 stretch stretch;
+}
+QPushButton#enter3{
+	border-image: url(pict/6.png)0 0 0 0 stretch stretch;
+}
+QPushButton#enter4{
+	border-image: url(pict/10.png)0 0 0 0 stretch stretch;
+}
+QPushButton#enter5{
+	border-image: url(pict/11.png)0 0 0 0 stretch stretch;
+}
+
+QPushButton#enter0::hover ,
+QPushButton#enter1::hover ,
+QPushButton#enter2::hover, 
+QPushButton#enter3::hover,
+QPushButton#enter4::hover,
+QPushButton#enter5::hover{
+	/*background-image:url(pict/del.png);*/
+	/*border-image: url(pict/3.png)0 0 0 0 stretch stretch;*/
+	background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+  stop: 0 white, 
+  stop: 0.5 #DCDCDC,
+  stop: 1 white);
+	opacity:99;
+
+}
+QPushButton#qwit0::pressed {
+	/*background-image:url(pict/del.png);*/
+	background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+  stop: 0 #E0FFFF, 
+  stop: 1 #000000);
+
+	opacity:99;
+
+}
+QGroupBox#grBoxUp, QGroupBox#grBoxAv {
+	background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+  stop: 0 white, 
+  stop: 1 #DCDCDC);
+	   border: 0.3 solid black; 	 
+     height: 10px ;
+	 border-radius: 15px;
+}
+QWidget#Wind{
+	background: green;
+}

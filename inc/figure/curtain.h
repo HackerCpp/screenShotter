@@ -1,18 +1,19 @@
 #ifndef CURTAIN_H
 #define CURTAIN_H
 #include <QGraphicsItem>
+#include "inc\figure\figure.h"
+#include <QColor>
 
-class Curtain : public QGraphicsItem {
-    float x,y,w,h;
-    int isClose;
-    QPointF lUp,lDown,rUp,rDown;
-    QPointF beginPoint,prevPoint;
+class Curtain : public Figure {
+    int m_number;
+    QPointF prevPoints;
+    bool close;
 
+    void transformation(QGraphicsSceneMouseEvent *event);
 public:
-    Curtain(int x,int y,int width, int height);
+    Curtain(int x,int y,int width, int height,QPen pen,int number);
 
 protected:
-    QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);

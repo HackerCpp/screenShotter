@@ -25,17 +25,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-    screenscene.cpp \
-    panel.cpp \
-    curtain.cpp
+        src/main.cpp \
+        src/mainwindow.cpp \
+    src/screenscene.cpp \
+    src/panel.cpp \
+    src/figure/curtain.cpp \
+    src/figure/figure.cpp \
+    src/figure/penandbrush.cpp\
+src/figure/arrow.cpp\
+src/figure/line.cpp\
+src/figure/ellips.cpp
 
 HEADERS += \
-        mainwindow.h \
-    screenscene.h \
-    panel.h \
-    curtain.h
+        inc/mainwindow.h \
+    inc/screenscene.h \
+    inc/panel.h \
+    inc/figure/curtain.h \
+    inc/figure/figure.h \
+    inc/figure/penandbrush.h\
+inc/figure/arrow.h\
+inc/figure/line.h\
+inc/figure/ellips.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

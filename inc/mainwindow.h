@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsView>
-#include "screenscene.h"
+#include "inc\screenscene.h"
 
 class MainWindow : public QGraphicsView
 {
@@ -15,6 +15,8 @@ class MainWindow : public QGraphicsView
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
+public slots:
+    void hideCitrain();
 };
 
 #endif // MAINWINDOW_H
