@@ -34,7 +34,10 @@ SOURCES += \
     src/figure/penandbrush.cpp\
 src/figure/arrow.cpp\
 src/figure/line.cpp\
-src/figure/ellips.cpp
+src/figure/ellips.cpp\
+src/figure/sepia.cpp\
+src/figure/text.cpp\
+src/figure/win.cpp
 
 HEADERS += \
         inc/mainwindow.h \
@@ -45,7 +48,10 @@ HEADERS += \
     inc/figure/penandbrush.h\
 inc/figure/arrow.h\
 inc/figure/line.h\
-inc/figure/ellips.h
+inc/figure/ellips.h\
+inc/figure/sepia.h\
+inc/figure/text.h\
+inc/figure/win.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -8,26 +8,18 @@
 #include "inc\figure\arrow.h"
 #include "inc\figure\line.h"
 #include "inc\figure\ellips.h"
+#include "inc\figure\sepia.h"
+#include "inc\figure\text.h"
+#include "inc\figure\win.h"
 #include <QGraphicsView>
 #include <QString>
 #include <QDebug>
 #include <QGraphicsProxyWidget>
+#include <QGraphicsBlurEffect>
 
 void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
     Figure *v = nullptr;
     switch (figure) {
-    case 1:{
-        if(curentFigure)
-            curentFigure->setActive(false);
-
-        this->curentFigure = dynamic_cast<Figure*>(itemAt(event->scenePos(),QTransform()));
-        if(curentFigure){
-            curentFigure->setActive(true);
-        }
-        update();
-        QGraphicsScene::mousePressEvent(event);
-        break;
-    }
     case 2:{
         v = new PenAndBrush(event->scenePos().x(),event->scenePos().y(),m_pen,true);
         break;
@@ -57,15 +49,29 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
         break;
     }
     case 9:{
-        //v = new Curtain(event->scenePos().x(),event->scenePos().y(),1,1,m_pen);
+        v = new Sepia(event->scenePos().x(),event->scenePos().y(),1,1,m_pen);
         break;
     }
     case 10:{
-        //v = new Curtain(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,0);
+        v = new Text(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,0);
         break;
     }
-    default:
+    case 11:{
+        v = new Win(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,0);
         break;
+    }
+    default:{
+        if(curentFigure)
+            curentFigure->setActive(false);
+
+        this->curentFigure = dynamic_cast<Figure*>(itemAt(event->scenePos(),QTransform()));
+        if(curentFigure){
+            curentFigure->setActive(true);
+        }
+        update();
+        QGraphicsScene::mousePressEvent(event);
+        break;
+    }
     }
 
     if(v){

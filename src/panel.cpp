@@ -125,7 +125,7 @@ Panel::Panel(QWidget *parent) : QWidget(parent){
     slyderColor = new QSlider(Qt::Horizontal);
     slyderColor->setMaximum(19);
     slyderThickness = new QSlider(Qt::Horizontal);
-    slyderThickness->setMaximum(300);
+    slyderThickness->setMaximum(255);
     slydersLayout = new QHBoxLayout();
     slydersLayout->addWidget(slyderColor);
     slydersLayout->addSpacing(50);
@@ -169,13 +169,13 @@ Panel::Panel(QWidget *parent) : QWidget(parent){
     this->toolBar = new QToolBar();
     toolBar->addWidget(leftWidg);
     this->toolBar->addSeparator();
-    btn = new QVector<QPushButton *>(10);
+    btn = new QVector<QPushButton *>(11);
     for(auto  b = btn->begin();b < btn->end();b++){
         *b = new QPushButton;
         QPushButton * btnInd = reinterpret_cast<QPushButton*>(*b);
         this->toolBar->addWidget(*b);
         btnInd->setCheckable(true);
-        btnInd->setFixedSize(thisWidth/15,thisHeight/2 - thisHeight/20);
+        btnInd->setFixedSize(thisWidth/18,thisHeight/2 - thisHeight/20);
         this->toolBar->addSeparator();
     }
     prevBtnInd = btn->at(0);
