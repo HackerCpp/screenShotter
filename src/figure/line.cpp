@@ -19,12 +19,16 @@ m_x =x;m_y = y;m_w = width;m_h = height;
 }
 
 void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
-        if(isActive){
-        }
         pen->setCapStyle(Qt::RoundCap);
         painter->setPen(*pen);
         painter->setBrush(*brush);
         painter->drawLine(m_x,m_y,m_x+m_w,m_y+m_h);
+        if(isActive){
+          painter->setPen(*penActive);
+          painter->setBrush(*brushActive);
+          painter->drawEllipse(m_x-5,m_y-5,10,10);
+          painter->drawEllipse(m_x+m_w-5,m_y+m_h-5,10,10);
+        }
 }
 
 

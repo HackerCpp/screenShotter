@@ -4,6 +4,9 @@ Figure::Figure(){
     isActive = false;
     brush = new QBrush();
     pen = new QPen();
+    brushActive = new QBrush(QColor(100,255,0,150));
+    penActive = new QPen(QColor(100,255,0,200));
+    setZValue(5);
 }
 QRectF Figure::boundingRect() const{
     return QRectF(m_x, m_y, m_w, m_h);

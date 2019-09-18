@@ -16,8 +16,8 @@ class Figure : public QGraphicsItem
 protected:
     float m_x,m_y,m_w,m_h;
     int figure;
-    QPen *pen;
-    QBrush *brush;
+    QPen *pen, *penActive;
+    QBrush *brush,*brushActive;
     bool isActive;
 public:
     Figure();

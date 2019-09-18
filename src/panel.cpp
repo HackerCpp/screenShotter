@@ -123,7 +123,7 @@ Panel::Panel(QWidget *parent) : QWidget(parent){
     thisWidth = size.width()/2;
     thisHeight = size.height()/8;
     slyderColor = new QSlider(Qt::Horizontal);
-    slyderColor->setMaximum(19);
+    slyderColor->setMaximum(35);
     slyderThickness = new QSlider(Qt::Horizontal);
     slyderThickness->setMaximum(255);
     slydersLayout = new QHBoxLayout();

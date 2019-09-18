@@ -5,13 +5,12 @@
 #include <QColor>
 
 class Win : public Figure {
-    int m_number;
     QPointF prevPoints;
     bool close;
 
     void transformation(QGraphicsSceneMouseEvent *event);
 public:
-    Win(int x,int y,int width, int height,QPen pen,int number);
+    Win(int x,int y,int width, int height,QPen pen);
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*);

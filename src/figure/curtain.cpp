@@ -19,17 +19,7 @@ m_x =x;m_y = y;m_w = width;m_h = height;
 }
 
 void Curtain::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
-        if(isActive){
-          painter->setPen(QPen(Qt::green));
-          painter->drawRect(QRect(m_x,m_y,100,100));
-          painter->drawRect(QRect(m_x,m_y,99,100));
-          painter->drawRect(QRect(m_x,m_y,98,100));
-          painter->drawRect(QRect(m_x,m_y,97,100));
-          painter->drawRect(QRect(m_x,m_y,96,100));
-          painter->drawRect(QRect(m_x,m_y,95,100));
-          painter->drawRect(QRect(m_x,m_y,94,100));
-          painter->drawRect(QRect(m_x,m_y,93,100));
-        }
+
         painter->setPen(*pen);
         painter->setBrush(*brush);
         painter->drawRect(QRect(m_x,m_y,m_w,m_h));
@@ -46,6 +36,19 @@ void Curtain::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*
                 painter->drawText(m_x+m_w-7,m_y+m_h+5,QString::number(m_number));
             }
 
+        }
+        if(isActive){
+          painter->setPen(*penActive);
+          painter->setBrush(*brushActive);
+          painter->drawEllipse(m_x-5,m_y-5,10,10);
+          painter->drawEllipse(m_x+m_w-5,m_y-5,10,10);
+          painter->drawEllipse(m_x-5,m_y+m_h-5,10,10);
+          painter->drawEllipse(m_x+m_w-5,m_y+m_h-5,10,10);
+
+          painter->drawEllipse(m_x+m_w/2,m_y-5,10,10);
+          painter->drawEllipse(m_x+m_w/2,m_y+m_h-5,10,10);
+          painter->drawEllipse(m_x-5,m_y+m_h/2,10,10);
+          painter->drawEllipse(m_x+m_w-5,m_y+m_h/2,10,10);
         }
 }
 

@@ -19,6 +19,8 @@
 
 void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
     Figure *v = nullptr;
+    if(curentFigure)
+        curentFigure->setActive(false);
     switch (figure) {
     case 2:{
         v = new PenAndBrush(event->scenePos().x(),event->scenePos().y(),m_pen,true);
@@ -33,7 +35,7 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
         break;
     }
     case 5:{
-        v = new Arrow(event->scenePos().x(),event->scenePos().y(),1,1,m_pen);
+        //v = new Arrow(event->scenePos().x(),event->scenePos().y(),1,1,m_pen);
         break;
     }
     case 6:{
@@ -49,7 +51,7 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
         break;
     }
     case 9:{
-        v = new Sepia(event->scenePos().x(),event->scenePos().y(),1,1,m_pen);
+        v = new Sepia(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,pixmap);
         break;
     }
     case 10:{
@@ -57,7 +59,7 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
         break;
     }
     case 11:{
-        v = new Win(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,0);
+        v = new Win(event->scenePos().x(),event->scenePos().y(),1,1,m_pen);
         break;
     }
     default:{
@@ -231,9 +233,9 @@ ScreenScene::ScreenScene(){
     figure = 0;
     close = 0;
     QScreen *screen = QGuiApplication::primaryScreen();
-    QPixmap pixmap = screen->grabWindow(0);
+    pixmap = screen->grabWindow(0);
     QCursor * cursor = new QCursor(QPixmap("cursors\\PF3C_zlk_Cross"));
-    QGraphicsPixmapItem *pixIteam = this->addPixmap(pixmap);
+    pixIteam = this->addPixmap(pixmap);
     rectCentr = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,150)),QBrush(QColor(0,0,0,150)));
     QPen pen(Qt::white);
     pen.setWidthF(0.25);
@@ -287,9 +289,10 @@ void ScreenScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
         }
         QGraphicsScene::mouseReleaseEvent(event);
     }
+    update();
 }
 void ScreenScene::changeColor(int index){
-    if(index < 20 & index > -1)
+    if(index < 36 & index > -1)
         this->m_pen.setColor(tableColor[index]);
     if(curentFigure)
         curentFigure->setColor(m_pen.color());

@@ -13,36 +13,38 @@ void Sepia::transformation(QGraphicsSceneMouseEvent *event){
     m_h -= p.y();
 }
 
-Sepia::Sepia(int x,int y,int width, int height,QPen pen){
-m_x =x;m_y = y;m_w = width;m_h = height;
+Sepia::Sepia(int x,int y,int width, int height,QPen pen,QPixmap pixmap){
+    m_x =x;m_y = y;m_w = width;m_h = height;
     *this->pen = pen;
-    this->brush->setColor(QColor(pen.color().red(),pen.color().green(),pen.color().blue(),pen.width() * 10));
     close = true;
+    this->m_pixMap = pixmap;
     prevPoints = QPointF(x,y);
-    QGraphicsBlurEffect *effect = new QGraphicsBlurEffect();
 }
 Q_GUI_EXPORT void qt_blurImage( QPainter* p, QImage& blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0 );
 void Sepia::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
+        int w,h,x,y;
+        x = m_w < 0?m_x + m_w:m_x;
+        w = m_w < 0?-m_w:m_w;
+        y = m_h < 0?m_y + m_h:m_y;
+        h = m_h < 0?-m_h:m_h;
+        w = w?w:1;
+        h = h?h:1;
+        QImage img(this->m_pixMap.toImage().copy(x,y,w,h));
+        painter->translate(x,y);
+        qt_blurImage(painter, img, pen->width()+10, true, false );
         if(isActive){
+          painter->setPen(*penActive);
+          painter->setBrush(*brushActive);
+          painter->drawEllipse(0,0,5,5);
+          painter->drawEllipse(0+w/2,0,5,5);
+          painter->drawEllipse(0,0+h/2,5,5);
+          painter->drawEllipse(0+w/2,0+h/2,5,5);
 
+          painter->drawEllipse(0+w/4,0,5,5);
+          painter->drawEllipse(0+w/4,0+h/2,5,5);
+          painter->drawEllipse(0,0+h/4,5,5);
+          painter->drawEllipse(0+w/2,0+h/4,5,5);
         }
-        QImage img(m_w,m_h,QImage::Format_RGB32 );
-        QPainter p( &img );
-        //p.setRenderHint( QPainter::Antialiasing );
-        scene()->render( painter, QRectF(), sceneBoundingRect() );
-        p.end();
-        painter->save();
-        qt_blurImage(&p, img, 30, true, false );
-        painter->drawImage(QRect(),img,QRect(m_x,m_y,m_w,m_h));
-        //painter->drawRect(QRect(m_x,m_y,m_w,m_h));
-        painter->restore();
-
-
-        /*painter->setPen(*pen);
-        this->brush->setColor(QColor(pen->color().red(),pen->color().green(),pen->color().blue(),pen->width() * 10));
-        painter->setPen(QPen(QColor(pen->color().red(),pen->color().green(),pen->color().blue(),pen->width() * 10)));
-        painter->setBrush(*brush);*/
-        //painter->drawRect(QRect(m_x,m_y,m_w,m_h));
 
 }
 
@@ -72,8 +74,11 @@ void Sepia::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     }
 }
 void Sepia::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
-    if(close)
+    if(close){
         close = false;
+        setZValue(4);
+    }
+    QGraphicsItem::prepareGeometryChange();
     update();
 }
 void Sepia::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event){

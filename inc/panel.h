@@ -79,6 +79,8 @@ public:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    int getWigthLine(){return this->slyderThickness->value();}
+    int getColor(){return this->slyderColor->value();}
 signals:
     void enterBtn();
     void changeColor(int value);

@@ -15,9 +15,6 @@ PenAndBrush::PenAndBrush(int x,int y,QPen pen,bool isPen){
 }
 
 void PenAndBrush::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
-        if(isActive){
-
-        }
         painter->setRenderHint(QPainter::Antialiasing,true);
         pen->setCosmetic(true);
         pen->setCapStyle(Qt::RoundCap);
@@ -32,6 +29,19 @@ void PenAndBrush::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWid
             path.lineTo(*point);
         }
         painter->drawPath(path);
+        if(isActive){
+          painter->setPen(*penActive);
+          painter->setBrush(*brushActive);
+          painter->drawEllipse(m_x-5,m_y-5,10,10);
+          painter->drawEllipse(m_x+m_w-5,m_y-5,10,10);
+          painter->drawEllipse(m_x-5,m_y+m_h-5,10,10);
+          painter->drawEllipse(m_x+m_w-5,m_y+m_h-5,10,10);
+
+          painter->drawEllipse(m_x+m_w/2,m_y-5,10,10);
+          painter->drawEllipse(m_x+m_w/2,m_y+m_h-5,10,10);
+          painter->drawEllipse(m_x-5,m_y+m_h/2,10,10);
+          painter->drawEllipse(m_x+m_w-5,m_y+m_h/2,10,10);
+        }
 }
 
 
@@ -51,9 +61,14 @@ void PenAndBrush::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
         QGraphicsItem::prepareGeometryChange();
         this->m_points.push_back(event->pos());
         x_max = x_max < event->pos().x()?event->pos().x():x_max;
-        x_min = x_min > event->pos().x()?event->pos().x():x_max;
+        x_min = x_min > event->pos().x()?event->pos().x():x_min;
         y_max = y_max < event->pos().y()?event->pos().y():y_max;
         y_min = y_min > event->pos().y()?event->pos().y():y_min;
+        m_x = x_min;
+        m_y = y_min;
+        m_w = x_max - x_min;
+        m_h = y_max - y_min;
+
         prevPoints = event->scenePos();
         update();
     }

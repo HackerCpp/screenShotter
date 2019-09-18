@@ -4,7 +4,7 @@
 #include "inc\figure\figure.h"
 #include <QColor>
 
-class Text : public Figure {
+class Text : public Figure , public QGraphicsTextItem {
     int m_number;
     QPointF prevPoints;
     bool close;
