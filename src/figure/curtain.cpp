@@ -27,12 +27,12 @@ void Curtain::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*
             painter->setBrush(QBrush(this->pen->color()));
             if(m_number < 10){
                 painter->drawEllipse(QRect(m_x+m_w-6,m_y+m_h-6,12,12));
-                painter->setPen(QPen(Qt::white));
+                painter->setPen(pen->color() == Qt::white?QPen(Qt::black):QPen(Qt::white));
                 painter->drawText(m_x+m_w-3,m_y+m_h+5,QString::number(m_number));
              }
             else{
                 painter->drawEllipse(QRect(m_x+m_w-8,m_y+m_h-8,15,15));
-                painter->setPen(QPen(Qt::white));
+                painter->setPen(pen->color() == Qt::white?QPen(Qt::black):QPen(Qt::white));
                 painter->drawText(m_x+m_w-7,m_y+m_h+5,QString::number(m_number));
             }
 
@@ -49,6 +49,8 @@ void Curtain::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*
           painter->drawEllipse(m_x+m_w/2,m_y+m_h-5,10,10);
           painter->drawEllipse(m_x-5,m_y+m_h/2,10,10);
           painter->drawEllipse(m_x+m_w-5,m_y+m_h/2,10,10);
+          painter->drawLine(m_x+m_w/2-5,m_y+m_h/2-5,m_x+m_w/2+5,m_y+m_h/2+5);
+          painter->drawLine(m_x+m_w/2-5,m_y+m_h/2+5,m_x+m_w/2+5,m_y+m_h/2-5);
         }
 }
 
@@ -60,6 +62,13 @@ void Curtain::mousePressEvent(QGraphicsSceneMouseEvent *event){
         update();
     }
     else{
+        for(int i_x = m_x+m_w/2 - 10;i_x<m_x+m_w/2+10;i_x++){
+            for(int i_y =m_y+m_h/2-10;i_y < m_y+m_h/2+10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 1;
+                }
+            }
+        }
         prevPoints = event->scenePos();
     }
 }
@@ -71,8 +80,11 @@ void Curtain::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
         update();
     }
     if(isActive){
+        if(cursorPosition == 1){
+            m_x -= prevPoints.x() - event->pos().x();
+            m_y -= prevPoints.y() - event->pos().y();
+        }
         QGraphicsItem::prepareGeometryChange();
-        transformation(event);
         prevPoints = event->scenePos();
         update();
     }
@@ -80,6 +92,8 @@ void Curtain::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
 void Curtain::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     if(close)
         close = false;
+    cursorPosition = 0;
+    QGraphicsItem::prepareGeometryChange();
     update();
 }
 void Curtain::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event){

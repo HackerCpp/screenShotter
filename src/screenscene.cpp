@@ -70,6 +70,7 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
         if(curentFigure){
             curentFigure->setActive(true);
         }
+        this->left_mouse = true;
         update();
         QGraphicsScene::mousePressEvent(event);
         break;
@@ -162,7 +163,14 @@ void ScreenScene::mouseMoveClose(QGraphicsSceneMouseEvent *event){
      rectIteam[6]->setRect(QRect().adjusted(0,lDown.y(),lDown.x(),height()));
      rectIteam[7]->setRect(QRect().adjusted(0,lUp.y(),lDown.x(),lDown.y()));
      textItem->setPos(rDown.x()+10,rDown.y()-30);
+     QPen pen(Qt::white);
+     QBrush brush(Qt::white);
+     pen.setWidth(0.1);
+     textItem->setPen(pen);
+     textItem->setBrush(brush);
+     textItem->setFont(QFont("Courier", 15));
      textItem->setText(QString::number(rUp.x() - lUp.x()) + "x" + QString::number(rDown.y() - rUp.y()));
+     textItem->setZValue(11);
 }
 void ScreenScene::mouseMoveOpen(QGraphicsSceneMouseEvent *event){
     if(!isCitrain){

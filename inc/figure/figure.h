@@ -14,11 +14,14 @@ class Figure : public QGraphicsItem
 {
 
 protected:
+    int m_zValue;
     float m_x,m_y,m_w,m_h;
     int figure;
     QPen *pen, *penActive;
     QBrush *brush,*brushActive;
     bool isActive;
+    int cursorPosition;
+    int m_translateX,m_translateY;
 public:
     Figure();
     QRectF boundingRect() const;

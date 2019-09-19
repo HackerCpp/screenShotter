@@ -1,15 +1,25 @@
 #include "inc\figure\figure.h"
 
 Figure::Figure(){
+    m_translateX = 0;m_translateY = 0;
+    cursorPosition = 0;
     isActive = false;
     brush = new QBrush();
     pen = new QPen();
-    brushActive = new QBrush(QColor(100,255,0,150));
-    penActive = new QPen(QColor(100,255,0,200));
+    brushActive = new QBrush(QColor(100,255,0,20));
+
+    penActive = new QPen(QColor(100,255,0,255));
+    penActive->setWidth(5);
+    m_zValue = 5;
     setZValue(5);
 }
 QRectF Figure::boundingRect() const{
-    return QRectF(m_x, m_y, m_w, m_h);
+    int x,y,w,h;
+    x = (m_w < 0?m_x + m_w:m_x);
+    w = (m_w < 0?-m_w:m_w);
+    y = (m_h < 0?m_y + m_h:m_y);
+    h = (m_h < 0?-m_h:m_h);
+    return QRectF(x, y, w, h);
 }
 void Figure::setColor(QColor color){
     QGraphicsItem::prepareGeometryChange();
@@ -30,6 +40,7 @@ void Figure::disableBrush(){
 }
 void Figure::setActive(bool active){
     isActive = active;
+    this->setZValue(active?8:m_zValue);
     QGraphicsItem::prepareGeometryChange();
     update();
 }

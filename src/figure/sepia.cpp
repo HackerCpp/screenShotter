@@ -35,15 +35,17 @@ void Sepia::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
         if(isActive){
           painter->setPen(*penActive);
           painter->setBrush(*brushActive);
-          painter->drawEllipse(0,0,5,5);
-          painter->drawEllipse(0+w/2,0,5,5);
-          painter->drawEllipse(0,0+h/2,5,5);
-          painter->drawEllipse(0+w/2,0+h/2,5,5);
+          painter->drawEllipse(0,0,2,2);
+          painter->drawEllipse(0+w/2,0,2,2);
+          painter->drawEllipse(0,0+h/2,2,2);
+          painter->drawEllipse(0+w/2,0+h/2,2,2);
 
-          painter->drawEllipse(0+w/4,0,5,5);
-          painter->drawEllipse(0+w/4,0+h/2,5,5);
-          painter->drawEllipse(0,0+h/4,5,5);
-          painter->drawEllipse(0+w/2,0+h/4,5,5);
+          painter->drawEllipse(0+w/4,0,2,2);
+          painter->drawEllipse(0+w/4,0+h/2,2,2);
+          painter->drawEllipse(0,0+h/4,2,2);
+          painter->drawEllipse(0+w/2,0+h/4,2,2);
+          painter->drawLine(0+w/4+2,0+h/4+2,0+w/4-2,0+h/4-2);
+          painter->drawLine(0+w/4-2,0+h/4+2,0+w/4+2,0+h/4-2);
         }
 
 }
@@ -56,6 +58,13 @@ void Sepia::mousePressEvent(QGraphicsSceneMouseEvent *event){
         update();
     }
     else{
+        for(int i_x = m_x+m_w/2 - 10;i_x<m_x+m_w/2+10;i_x++){
+            for(int i_y =m_y+m_h/2-10;i_y < m_y+m_h/2+10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 1;
+                }
+            }
+        }
         prevPoints = event->scenePos();
     }
 }
@@ -67,8 +76,11 @@ void Sepia::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
         update();
     }
     if(isActive){
+        if(cursorPosition == 1){
+            m_x -= prevPoints.x() - event->pos().x();
+            m_y -= prevPoints.y() - event->pos().y();
+        }
         QGraphicsItem::prepareGeometryChange();
-        transformation(event);
         prevPoints = event->scenePos();
         update();
     }
@@ -76,8 +88,10 @@ void Sepia::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
 void Sepia::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     if(close){
         close = false;
-        setZValue(4);
+        m_zValue = 4;
+        setZValue(m_zValue);
     }
+    cursorPosition = 0;
     QGraphicsItem::prepareGeometryChange();
     update();
 }

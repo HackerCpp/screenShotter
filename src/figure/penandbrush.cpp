@@ -15,6 +15,7 @@ PenAndBrush::PenAndBrush(int x,int y,QPen pen,bool isPen){
 }
 
 void PenAndBrush::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
+        painter->translate(m_translateX,m_translateY);
         painter->setRenderHint(QPainter::Antialiasing,true);
         pen->setCosmetic(true);
         pen->setCapStyle(Qt::RoundCap);
@@ -41,6 +42,9 @@ void PenAndBrush::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWid
           painter->drawEllipse(m_x+m_w/2,m_y+m_h-5,10,10);
           painter->drawEllipse(m_x-5,m_y+m_h/2,10,10);
           painter->drawEllipse(m_x+m_w-5,m_y+m_h/2,10,10);
+          painter->drawLine(m_x+m_w/2-5,m_y+m_h/2-5,m_x+m_w/2+5,m_y+m_h/2+5);
+          painter->drawLine(m_x+m_w/2-5,m_y+m_h/2+5,m_x+m_w/2+5,m_y+m_h/2-5);
+          //painter->drawRect(boundingRect());
         }
 }
 
@@ -53,6 +57,13 @@ void PenAndBrush::mousePressEvent(QGraphicsSceneMouseEvent *event){
         update();
     }
     else{
+        for(int i_x = m_x+m_w/2 - 10;i_x<m_x+m_w/2+10;i_x++){
+            for(int i_y =m_y+m_h/2-10;i_y < m_y+m_h/2+10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 1;
+                }
+            }
+        }
         prevPoints = event->scenePos();
     }
 }
@@ -73,8 +84,15 @@ void PenAndBrush::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
         update();
     }
     else if(isActive){
+        if(cursorPosition == 1){
+            m_x -= prevPoints.x() - event->pos().x();
+            m_y -= prevPoints.y() - event->pos().y();
+            for(auto p = m_points.begin();p < m_points.end();p++){
+                p->setX(p->x()-(prevPoints.x() - event->pos().x()));
+                p->setY(p->y()-(prevPoints.y() - event->pos().y()));
+            }
+        }
         QGraphicsItem::prepareGeometryChange();
-
         prevPoints = event->scenePos();
         update();
     }
@@ -82,6 +100,7 @@ void PenAndBrush::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
 void PenAndBrush::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     if(close)
         close = false;
+    cursorPosition = 0;
     update();
 }
 void PenAndBrush::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event){
