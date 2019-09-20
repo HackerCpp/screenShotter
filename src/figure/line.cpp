@@ -50,6 +50,20 @@ void Line::mousePressEvent(QGraphicsSceneMouseEvent *event){
                 }
             }
         }
+        for(int i_x = m_x+m_w - 10;i_x<m_x+m_w+10;i_x++){
+            for(int i_y =m_y+m_h-10;i_y < m_y+m_h+10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 2;
+                }
+            }
+        }
+        for(int i_x = m_x - 10;i_x<m_x + 10;i_x++){
+            for(int i_y =m_y - 10;i_y < m_y + 10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 3;
+                }
+            }
+        }
         prevPoints = event->scenePos();
     }
 }
@@ -65,7 +79,18 @@ void Line::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
             m_x -= prevPoints.x() - event->pos().x();
             m_y -= prevPoints.y() - event->pos().y();
         }
-
+        else if(cursorPosition == 2){
+            QPointF p = prevPoints - event->scenePos();
+            m_w -= p.x();
+            m_h -= p.y();
+        }
+        else if(cursorPosition == 3){
+            QPointF p = prevPoints - event->scenePos();
+            m_x -= p.x();
+            m_y -= p.y();
+            m_w += p.x();
+            m_h += p.y();
+        }
         prevPoints = event->scenePos();
         QGraphicsItem::prepareGeometryChange();
         update();

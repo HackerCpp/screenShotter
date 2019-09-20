@@ -15,10 +15,10 @@ Figure::Figure(){
 }
 QRectF Figure::boundingRect() const{
     int x,y,w,h;
-    x = (m_w < 0?m_x + m_w:m_x);
-    w = (m_w < 0?-m_w:m_w);
-    y = (m_h < 0?m_y + m_h:m_y);
-    h = (m_h < 0?-m_h:m_h);
+    x = (m_w < 0?m_x + m_w:m_x)-10;
+    w = (m_w < 0?-m_w:m_w)+20;
+    y = (m_h < 0?m_y + m_h:m_y)-10;
+    h = (m_h < 0?-m_h:m_h)+20;
     return QRectF(x, y, w, h);
 }
 void Figure::setColor(QColor color){

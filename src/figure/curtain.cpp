@@ -69,6 +69,62 @@ void Curtain::mousePressEvent(QGraphicsSceneMouseEvent *event){
                 }
             }
         }
+        for(int i_x = m_x+m_w - 10;i_x<m_x+m_w+10;i_x++){
+            for(int i_y =m_y+m_h-10;i_y < m_y+m_h+10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 2;
+                }
+            }
+        }
+        for(int i_x = m_x - 10;i_x<m_x + 10;i_x++){
+            for(int i_y =m_y - 10;i_y < m_y + 10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 3;
+                }
+            }
+        }
+        for(int i_x = m_x+m_w - 10;i_x<m_x+m_w+10;i_x++){
+            for(int i_y =m_y - 10;i_y < m_y + 10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 4;
+                }
+            }
+        }
+        for(int i_x = m_x - 10;i_x<m_x + 10;i_x++){
+            for(int i_y =m_y+m_h-10;i_y < m_y+m_h+10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 5;
+                }
+            }
+        }
+        for(int i_x = m_x+m_w/2-10;i_x<m_x+m_w/2+10;i_x++){
+            for(int i_y = m_y - 10;i_y < m_y + 10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 6;
+                }
+            }
+        }
+        for(int i_x = m_x+m_w/2-10;i_x<m_x+m_w/2+10;i_x++){
+            for(int i_y = m_y + m_h - 10;i_y < m_y + m_h + 10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 7;
+                }
+            }
+        }
+        for(int i_x = m_x-10;i_x<m_x+10;i_x++){
+            for(int i_y = m_y + m_h/2 - 10;i_y < m_y + m_h/2 + 10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 8;
+                }
+            }
+        }
+        for(int i_x = m_x+m_w-10;i_x<m_x+m_w+10;i_x++){
+            for(int i_y = m_y + m_h/2 - 10;i_y < m_y + m_h/2 + 10;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
+                    cursorPosition = 9;
+                }
+            }
+        }
         prevPoints = event->scenePos();
     }
 }
@@ -80,9 +136,44 @@ void Curtain::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
         update();
     }
     if(isActive){
+        QPointF p = prevPoints - event->scenePos();
         if(cursorPosition == 1){
-            m_x -= prevPoints.x() - event->pos().x();
-            m_y -= prevPoints.y() - event->pos().y();
+            m_x -= p.x();
+            m_y -= p.y();
+        }
+        else if(cursorPosition == 2){
+            m_w -= p.x();
+            m_h -= p.y();
+        }
+        else if(cursorPosition == 3){
+            m_x -= p.x();
+            m_y -= p.y();
+            m_w += p.x();
+            m_h += p.y();
+        }
+        else if(cursorPosition == 4){
+            m_y -= p.y();
+            m_w -= p.x();
+            m_h += p.y();
+        }
+        else if(cursorPosition == 5){
+            m_x -= p.x();
+            m_w += p.x();
+            m_h -= p.y();
+        }
+        else if(cursorPosition == 6){
+            m_h += p.y();
+            m_y -= p.y();
+        }
+        else if(cursorPosition == 7){
+            m_h -= p.y();
+        }
+        else if(cursorPosition == 8){
+            m_w += p.x();
+            m_x -= p.x();
+        }
+        else if(cursorPosition == 9){
+            m_w -= p.x();
         }
         QGraphicsItem::prepareGeometryChange();
         prevPoints = event->scenePos();
