@@ -62,69 +62,7 @@ void Curtain::mousePressEvent(QGraphicsSceneMouseEvent *event){
         update();
     }
     else{
-        for(int i_x = m_x+m_w/2 - 10;i_x<m_x+m_w/2+10;i_x++){
-            for(int i_y =m_y+m_h/2-10;i_y < m_y+m_h/2+10;i_y++){
-                if(i_x == event->pos().x() & i_y == event->pos().y()){
-                    cursorPosition = 1;
-                }
-            }
-        }
-        for(int i_x = m_x+m_w - 10;i_x<m_x+m_w+10;i_x++){
-            for(int i_y =m_y+m_h-10;i_y < m_y+m_h+10;i_y++){
-                if(i_x == event->pos().x() & i_y == event->pos().y()){
-                    cursorPosition = 2;
-                }
-            }
-        }
-        for(int i_x = m_x - 10;i_x<m_x + 10;i_x++){
-            for(int i_y =m_y - 10;i_y < m_y + 10;i_y++){
-                if(i_x == event->pos().x() & i_y == event->pos().y()){
-                    cursorPosition = 3;
-                }
-            }
-        }
-        for(int i_x = m_x+m_w - 10;i_x<m_x+m_w+10;i_x++){
-            for(int i_y =m_y - 10;i_y < m_y + 10;i_y++){
-                if(i_x == event->pos().x() & i_y == event->pos().y()){
-                    cursorPosition = 4;
-                }
-            }
-        }
-        for(int i_x = m_x - 10;i_x<m_x + 10;i_x++){
-            for(int i_y =m_y+m_h-10;i_y < m_y+m_h+10;i_y++){
-                if(i_x == event->pos().x() & i_y == event->pos().y()){
-                    cursorPosition = 5;
-                }
-            }
-        }
-        for(int i_x = m_x+m_w/2-10;i_x<m_x+m_w/2+10;i_x++){
-            for(int i_y = m_y - 10;i_y < m_y + 10;i_y++){
-                if(i_x == event->pos().x() & i_y == event->pos().y()){
-                    cursorPosition = 6;
-                }
-            }
-        }
-        for(int i_x = m_x+m_w/2-10;i_x<m_x+m_w/2+10;i_x++){
-            for(int i_y = m_y + m_h - 10;i_y < m_y + m_h + 10;i_y++){
-                if(i_x == event->pos().x() & i_y == event->pos().y()){
-                    cursorPosition = 7;
-                }
-            }
-        }
-        for(int i_x = m_x-10;i_x<m_x+10;i_x++){
-            for(int i_y = m_y + m_h/2 - 10;i_y < m_y + m_h/2 + 10;i_y++){
-                if(i_x == event->pos().x() & i_y == event->pos().y()){
-                    cursorPosition = 8;
-                }
-            }
-        }
-        for(int i_x = m_x+m_w-10;i_x<m_x+m_w+10;i_x++){
-            for(int i_y = m_y + m_h/2 - 10;i_y < m_y + m_h/2 + 10;i_y++){
-                if(i_x == event->pos().x() & i_y == event->pos().y()){
-                    cursorPosition = 9;
-                }
-            }
-        }
+        cursorPosition = getPoint(event->pos());
         prevPoints = event->scenePos();
     }
 }

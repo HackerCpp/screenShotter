@@ -35,7 +35,7 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
         break;
     }
     case 5:{
-        //v = new Arrow(event->scenePos().x(),event->scenePos().y(),1,1,m_pen);
+        v = new Arrow(event->scenePos().x(),event->scenePos().y(),1,1,m_pen);
         break;
     }
     case 6:{
@@ -95,7 +95,7 @@ void ScreenScene::mouseClkClose(QGraphicsSceneMouseEvent *event){
     QPointF point = rDown - lUp;
     QPen pen(Qt::white);
     pen.setWidthF(0.25);
-    QBrush brush(QColor(0,0,0,150));
+    QBrush brush(QColor(0,0,0,100));
     textItem = addSimpleText("");
 
     rectIteam[0] = addRect(QRect().adjusted(0,0,lUp.x(),lUp.y()),pen,brush);
@@ -221,14 +221,14 @@ void ScreenScene::mouseMoveOpen(QGraphicsSceneMouseEvent *event){
      update();
 }
 void ScreenScene::mouseRelClose(QGraphicsSceneMouseEvent *event){
-    rectIteam[0]->setCursor(QCursor(QPixmap("cursors\\PF3C_zlk_size_3")));
-    rectIteam[1]->setCursor(QCursor(QPixmap("cursors\\PF3C_zlk_size_1")));
-    rectIteam[2]->setCursor(QCursor(QPixmap("cursors\\PF3C_zlk_size_4")));
-    rectIteam[3]->setCursor(QCursor(QPixmap("cursors\\PF3C_zlk_size_2")));
-    rectIteam[4]->setCursor(QCursor(QPixmap("cursors\\PF3C_zlk_size_3")));
-    rectIteam[5]->setCursor(QCursor(QPixmap("cursors\\PF3C_zlk_size_1")));
-    rectIteam[6]->setCursor(QCursor(QPixmap("cursors\\PF3C_zlk_size_4")));
-    rectIteam[7]->setCursor(QCursor(QPixmap("cursors\\PF3C_zlk_size_2")));
+    rectIteam[0]->setCursor(QCursor(QPixmap("cursors\\DiagonalResize1")));
+    rectIteam[1]->setCursor(QCursor(QPixmap("cursors\\VerticalResize")));
+    rectIteam[2]->setCursor(QCursor(QPixmap("cursors\\DiagonalResize2")));
+    rectIteam[3]->setCursor(QCursor(QPixmap("cursors\\HorizontalResize")));
+    rectIteam[4]->setCursor(QCursor(QPixmap("cursors\\DiagonalResize1")));
+    rectIteam[5]->setCursor(QCursor(QPixmap("cursors\\VerticalResize")));
+    rectIteam[6]->setCursor(QCursor(QPixmap("cursors\\DiagonalResize2")));
+    rectIteam[7]->setCursor(QCursor(QPixmap("cursors\\HorizontalResize")));
     panel->setGeometry(event->scenePos().x() - panel->width(),event->scenePos().y() + 30,panel->width(),panel->height());
     //panelItem->setPos(event->scenePos().x() - panel->width(),event->scenePos().y() + 30);
     panel->show();
@@ -242,14 +242,15 @@ ScreenScene::ScreenScene(){
     close = 0;
     QScreen *screen = QGuiApplication::primaryScreen();
     pixmap = screen->grabWindow(0);
-    QCursor * cursor = new QCursor(QPixmap("cursors\\PF3C_zlk_Cross"));
+    QCursor * cursor = new QCursor(QPixmap("cursors\\Precision"));
     pixIteam = this->addPixmap(pixmap);
-    rectCentr = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,150)),QBrush(QColor(0,0,0,150)));
+    rectCentr = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,100)),QBrush(QColor(0,0,0,100)));
     QPen pen(Qt::white);
     pen.setWidthF(0.25);
     horizontalLine = this->addLine(QLineF(0,this->height()/2,this->width(),this->height()/2),pen);
     verticalLine = this->addLine(QLineF(this->width()/2,0,this->width()/2,this->height()),pen);
     horizontalLine->setCursor(*cursor);
+    verticalLine->setCursor(*cursor);
     panel = new Panel();
     connect(this->panel,SIGNAL(changeColor(int)),this,SLOT(changeColor(int)));
     connect(this->panel,SIGNAL(changeWidthLine(int)),this,SLOT(changeWLine(int)));

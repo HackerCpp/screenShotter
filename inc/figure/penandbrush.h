@@ -10,7 +10,9 @@ class PenAndBrush : public Figure{
     QPointF lUp,lDown,rUp,rDown,prevPoints;
     bool close;
     QList<QPointF> m_points;
+    QList<QPointF> m_pointsBegin;
     float x_min,x_max,y_min,y_max;
+    float m_xBegin,m_yBegin,m_wBegin,m_hBegin;
     bool m_isPen;
 
 public:

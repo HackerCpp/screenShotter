@@ -1,7 +1,9 @@
 #include "inc\figure\figure.h"
 
 Figure::Figure(){
+    m_scaleX = 1;m_scaleY = 1;
     m_translateX = 0;m_translateY = 0;
+    m_angX = 0;m_angY = 0;
     cursorPosition = 0;
     isActive = false;
     brush = new QBrush();
@@ -12,6 +14,71 @@ Figure::Figure(){
     penActive->setWidth(5);
     m_zValue = 5;
     setZValue(5);
+}
+int Figure::getPoint(QPointF p){
+    for(int i_x = m_x+m_w/2 - 10;i_x<m_x+m_w/2+10;i_x++){
+        for(int i_y =m_y+m_h/2-10;i_y < m_y+m_h/2+10;i_y++){
+            if(i_x == p.x() & i_y == p.y()){
+                return 1;
+            }
+        }
+    }
+    for(int i_x = m_x+m_w - 10;i_x<m_x+m_w+10;i_x++){
+        for(int i_y =m_y+m_h-10;i_y < m_y+m_h+10;i_y++){
+            if(i_x == p.x() & i_y == p.y()){
+                return 2;
+            }
+        }
+    }
+    for(int i_x = m_x - 10;i_x<m_x + 10;i_x++){
+        for(int i_y =m_y - 10;i_y < m_y + 10;i_y++){
+            if(i_x == p.x() & i_y == p.y()){
+                return 3;
+            }
+        }
+    }
+    for(int i_x = m_x+m_w - 10;i_x<m_x+m_w+10;i_x++){
+        for(int i_y =m_y - 10;i_y < m_y + 10;i_y++){
+            if(i_x == p.x() & i_y == p.y()){
+                return 4;
+            }
+        }
+    }
+    for(int i_x = m_x - 10;i_x<m_x + 10;i_x++){
+        for(int i_y =m_y+m_h-10;i_y < m_y+m_h+10;i_y++){
+            if(i_x == p.x() & i_y == p.y()){
+                return  5;
+            }
+        }
+    }
+    for(int i_x = m_x+m_w/2-10;i_x<m_x+m_w/2+10;i_x++){
+        for(int i_y = m_y - 10;i_y < m_y + 10;i_y++){
+            if(i_x == p.x() & i_y == p.y()){
+                return 6;
+            }
+        }
+    }
+    for(int i_x = m_x+m_w/2-10;i_x<m_x+m_w/2+10;i_x++){
+        for(int i_y = m_y + m_h - 10;i_y < m_y + m_h + 10;i_y++){
+            if(i_x == p.x() & i_y == p.y()){
+                return 7;
+            }
+        }
+    }
+    for(int i_x = m_x-10;i_x<m_x+10;i_x++){
+        for(int i_y = m_y + m_h/2 - 10;i_y < m_y + m_h/2 + 10;i_y++){
+            if(i_x == p.x() & i_y == p.y()){
+                return 8;
+            }
+        }
+    }
+    for(int i_x = m_x+m_w-10;i_x<m_x+m_w+10;i_x++){
+        for(int i_y = m_y + m_h/2 - 10;i_y < m_y + m_h/2 + 10;i_y++){
+            if(i_x == p.x() & i_y == p.y()){
+                return 9;
+            }
+        }
+    }
 }
 QRectF Figure::boundingRect() const{
     int x,y,w,h;

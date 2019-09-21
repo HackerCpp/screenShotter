@@ -21,10 +21,11 @@ protected:
     QBrush *brush,*brushActive;
     bool isActive;
     int cursorPosition;
-    int m_translateX,m_translateY;
+    double m_scaleX,m_scaleY,m_translateX,m_translateY,m_angX,m_angY;
 public:
     Figure();
     QRectF boundingRect() const;
+    int getPoint(QPointF p);
     void setActive(bool active);
     void setColor(QColor color);
     void setWidthLine(int width);

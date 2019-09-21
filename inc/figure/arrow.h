@@ -7,8 +7,9 @@
 class Arrow : public Figure {
     QPointF prevPoints;
     bool close;
-    QVector<QPoint> *points;
-
+    QVector<QPoint> *m_points;
+    QVector<QPoint> *m_pointsBegin;
+    int length;
     void transformation(QGraphicsSceneMouseEvent *event);
 public:
     Arrow(int x,int y,int width, int height,QPen pen);
