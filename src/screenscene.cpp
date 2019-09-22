@@ -10,7 +10,6 @@
 #include "inc\figure\ellips.h"
 #include "inc\figure\sepia.h"
 #include "inc\figure\text.h"
-#include "inc\figure\win.h"
 #include <QGraphicsView>
 #include <QString>
 #include <QDebug>
@@ -60,7 +59,7 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
         break;
     }
     case 11:{
-        v = new Win(event->scenePos().x(),event->scenePos().y(),1,1,m_pen);
+        //
         break;
     }
     default:{

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -37,7 +37,7 @@ src/figure/line.cpp\
 src/figure/ellips.cpp\
 src/figure/sepia.cpp\
 src/figure/text.cpp\
-src/figure/win.cpp
+    src/client.cpp
 
 HEADERS += \
         inc/mainwindow.h \
@@ -51,7 +51,7 @@ inc/figure/line.h\
 inc/figure/ellips.h\
 inc/figure/sepia.h\
 inc/figure/text.h\
-inc/figure/win.h
+    inc/client.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
