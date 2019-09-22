@@ -9,11 +9,24 @@ void Arrow::transformation(QGraphicsSceneMouseEvent *event){
     QPointF p = prevPoints - event->scenePos();
     m_w -= p.x();
     m_h -= p.y();
+    if(tail){
+        m_pointsBegin->data()[2].setY(length + heightmin);
+        m_pointsBegin->data()[3].setY(length +heightmax);
+        m_pointsBegin->data()[4].setY(length);
+        m_pointsBegin->data()[5].setY(length +heightmax);
+        m_pointsBegin->data()[6].setY(length+heightmin);
 
+        m_pointsBegin->data()[0].setY(0);
+        m_pointsBegin->data()[1].setY(0);
+        m_translateY -= m_h;
+        m_translateX -= m_w;
+        tail = false;
+    }
     double lengthA = qSqrt(qPow((0 + event->pos().x()-m_translateX),2)+qPow((0 + event->pos().y()-m_translateY),2));
     double lengthB = qSqrt(qPow(0 + (event->pos().x()-m_translateX),2)+qPow((lengthA + event->pos().y()-m_translateY ),2));
     double lengthC = qSqrt(qPow((0 + event->pos().x()-m_translateX),2)+qPow((0 + event->pos().y()-m_translateY),2));
     double cos = (qPow(lengthC,2)+qPow(lengthA,2) - qPow(lengthB,2))/(2*lengthC*lengthA);
+    length = lengthA;
     if(event->pos().x()>m_translateX)
         m_angX = (qAcos(cos)*180)/3.14;
     else {
@@ -26,27 +39,60 @@ void Arrow::transformation(QGraphicsSceneMouseEvent *event){
         m_pointsBegin->data()[4].setY(-lengthA);
         m_pointsBegin->data()[5].setY(-lengthA);
         m_pointsBegin->data()[6].setY(-lengthA);
+
         m_pointsBegin->data()[2].setX(lengthA);
         m_pointsBegin->data()[3].setX(-lengthA);
-
         m_pointsBegin->data()[5].setX(lengthA);
         m_pointsBegin->data()[6].setX(-lengthA);
     }
     else{
-        m_pointsBegin->data()[2].setY(-lengthA + 14);
-        m_pointsBegin->data()[3].setY(-lengthA +15);
+        m_pointsBegin->data()[2].setY(-lengthA + heightmin);
+        m_pointsBegin->data()[3].setY(-lengthA +heightmax);
         m_pointsBegin->data()[4].setY(-lengthA);
-        m_pointsBegin->data()[5].setY(-lengthA +15);
-        m_pointsBegin->data()[6].setY(-lengthA+14);
-        m_pointsBegin->data()[2].setX(5);
-        m_pointsBegin->data()[3].setX(-10);
-        m_pointsBegin->data()[5].setX(10);
-        m_pointsBegin->data()[6].setX(-5);
+        m_pointsBegin->data()[5].setY(-lengthA +heightmin);
+        m_pointsBegin->data()[6].setY(-lengthA+heightmax);
+        m_pointsBegin->data()[2].setX(widthmin);
+        m_pointsBegin->data()[3].setX(-widthmax);
+        m_pointsBegin->data()[5].setX(widthmax);
+        m_pointsBegin->data()[6].setX(-widthmin);
     }
 }
+void Arrow::transformationTwo(QGraphicsSceneMouseEvent *event){
+    QPointF p = prevPoints - event->scenePos();
+    m_w += p.x();
+    m_h += p.y();
+    m_x -= p.x();
+    m_y -= p.y();
+    if(!tail){
+        m_pointsBegin->data()[2].setY(0 + 14);
+        m_pointsBegin->data()[3].setY(0 +15);
+        m_pointsBegin->data()[4].setY(0);
+        m_pointsBegin->data()[5].setY(0 +15);
+        m_pointsBegin->data()[6].setY(0+14);
 
+        m_pointsBegin->data()[0].setY(length);
+        m_pointsBegin->data()[1].setY(length);
+        m_translateY += m_h;
+        m_translateX += m_w;
+        tail = true;
+    }
+    double lengthA = qSqrt(qPow((0 + event->pos().x()-m_translateX),2)+qPow((0 + event->pos().y()-m_translateY),2));
+    double lengthB = qSqrt(qPow(0 + (event->pos().x()-m_translateX),2)+qPow((lengthA + event->pos().y()-m_translateY ),2));
+    double lengthC = qSqrt(qPow((0 + event->pos().x()-m_translateX),2)+qPow((0 + event->pos().y()-m_translateY),2));
+    double cos = (qPow(lengthC,2)+qPow(lengthA,2) - qPow(lengthB,2))/(2*lengthC*lengthA);
+    length = lengthA;
+    if(event->pos().x()>m_translateX)
+        m_angX = (qAcos(cos)*180)/3.14-180;
+    else {
+        m_angX = -(qAcos(cos)*180)/3.14-180;
+    }
+    m_pointsBegin->data()[0].setY(length);
+    m_pointsBegin->data()[1].setY(length);
+
+}
 Arrow::Arrow(int x,int y,int width, int height,QPen pen){
 m_x =x;m_y = y;m_w = width;m_h = height;
+    tail = false;
     *this->pen = pen;
     close = true;
     prevPoints = QPointF(x,y);
@@ -61,6 +107,9 @@ m_x =x;m_y = y;m_w = width;m_h = height;
     m_pointsBegin->data()[4] = QPoint(0,0);
     m_pointsBegin->data()[5] = QPoint(0,-10);
     m_pointsBegin->data()[6] = QPoint(0,-10);
+    widthmin = 5;widthmax = 10;
+    heightmin = 14;
+    heightmax = 15;
 }
 
 void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
@@ -68,14 +117,15 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
         painter->translate(m_translateX,m_translateY);
         painter->rotate(m_angX);
         brush->setColor(pen->color());
+        pen->setWidth(2);
         painter->setPen(*pen);
         painter->setBrush(*brush);
         painter->drawPolygon(QPolygon(*m_pointsBegin));
         if(isActive){
           painter->setPen(*penActive);
           painter->setBrush(*brushActive);
-          painter->drawEllipse(m_pointsBegin->data()[4].x()-5,m_pointsBegin->data()[4].y()-5,10,10);
-          painter->drawEllipse(m_pointsBegin->data()[0].x()-5,m_pointsBegin->data()[0].x()-5,10,10);
+          painter->drawEllipse(m_pointsBegin->data()[4].x()-5,m_pointsBegin->data()[4].y()-5,5,5);
+          painter->drawEllipse(m_pointsBegin->data()[0].x()-5,m_pointsBegin->data()[0].x()-5,5,5);
           painter->drawLine(m_pointsBegin->data()[4].x()+((m_pointsBegin->data()[0].x()-m_pointsBegin->data()[4].x())/2)-5,
                             m_pointsBegin->data()[4].y()+((m_pointsBegin->data()[0].y()-m_pointsBegin->data()[4].y())/2)-5,
                             m_pointsBegin->data()[4].x()+((m_pointsBegin->data()[0].x()-m_pointsBegin->data()[4].x())/2)+5,
@@ -84,6 +134,7 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
                             m_pointsBegin->data()[4].y()+((m_pointsBegin->data()[0].y()-m_pointsBegin->data()[4].y())/2)+5,
                             m_pointsBegin->data()[4].x()+((m_pointsBegin->data()[0].x()-m_pointsBegin->data()[4].x())/2)+5,
                             m_pointsBegin->data()[4].y()+((m_pointsBegin->data()[0].y()-m_pointsBegin->data()[4].y())/2)-5);
+
         }
 }
 
@@ -112,9 +163,9 @@ void Arrow::mousePressEvent(QGraphicsSceneMouseEvent *event){
                 }
             }
         }
-        for(int i_x = m_pointsBegin->data()[0].x()-15;i_x < m_pointsBegin->data()[0].x()+5;i_x++){
-            for(int i_y =m_pointsBegin->data()[0].y()- 15;i_y < m_pointsBegin->data()[0].y() + 5;i_y++){
-                if(i_x == event->pos().x()-m_translateX & i_y == event->pos().y()-m_translateY){
+        for(int i_x = m_x-15;i_x < m_x+15;i_x++){
+            for(int i_y =m_y- 15;i_y < m_y + 15;i_y++){
+                if(i_x == event->pos().x() & i_y == event->pos().y()){
                     cursorPosition = 2;
                 }
             }
@@ -136,7 +187,7 @@ void Arrow::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
             transformation(event);
         }
         else if(cursorPosition == 2){
-
+            transformationTwo(event);
         }
         else if(cursorPosition == 3){
             m_translateY-=p.y();

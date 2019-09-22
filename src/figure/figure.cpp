@@ -107,7 +107,7 @@ void Figure::disableBrush(){
 }
 void Figure::setActive(bool active){
     isActive = active;
-    this->setZValue(active?8:m_zValue);
+    //this->setZValue(active?8:m_zValue);
     QGraphicsItem::prepareGeometryChange();
     update();
 }

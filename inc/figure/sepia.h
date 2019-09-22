@@ -7,12 +7,12 @@
 class Sepia : public Figure {
     int m_number;
     QPointF prevPoints;
-    bool close;
+    bool close,m_sepia;
     QPixmap m_pixMap;
 
     void transformation(QGraphicsSceneMouseEvent *event);
 public:
-    Sepia(int x,int y,int width, int height,QPen pen,QPixmap pixmap);
+    Sepia(int x,int y,int width, int height,QPen pen,QPixmap pixmap,bool sepia);
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*);

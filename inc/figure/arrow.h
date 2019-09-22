@@ -6,11 +6,13 @@
 
 class Arrow : public Figure {
     QPointF prevPoints;
-    bool close;
+    bool close,tail;
     QVector<QPoint> *m_points;
     QVector<QPoint> *m_pointsBegin;
+    int widthmin,widthmax,heightmin,heightmax;
     int length;
     void transformation(QGraphicsSceneMouseEvent *event);
+    void transformationTwo(QGraphicsSceneMouseEvent *event);
 public:
     Arrow(int x,int y,int width, int height,QPen pen);
 

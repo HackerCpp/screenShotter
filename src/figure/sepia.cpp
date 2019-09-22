@@ -13,8 +13,9 @@ void Sepia::transformation(QGraphicsSceneMouseEvent *event){
     m_h -= p.y();
 }
 
-Sepia::Sepia(int x,int y,int width, int height,QPen pen,QPixmap pixmap){
+Sepia::Sepia(int x,int y,int width, int height,QPen pen,QPixmap pixmap,bool sepia){
     m_x =x;m_y = y;m_w = width;m_h = height;
+    m_sepia = sepia;
     *this->pen = pen;
     close = true;
     this->m_pixMap = pixmap;
@@ -31,21 +32,38 @@ void Sepia::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
         h = h?h:1;
         QImage img(this->m_pixMap.toImage().copy(x,y,w,h));
         painter->translate(x,y);
-        qt_blurImage(painter, img, pen->width()+10, true, false );
+        qt_blurImage(painter, img, m_sepia?pen->width()+10:0, true, false );
         if(isActive){
-          painter->setPen(*penActive);
-          painter->setBrush(*brushActive);
-          painter->drawEllipse(0,0,2,2);
-          painter->drawEllipse(0+w/2,0,2,2);
-          painter->drawEllipse(0,0+h/2,2,2);
-          painter->drawEllipse(0+w/2,0+h/2,2,2);
+            if(m_sepia){
+                painter->setPen(*penActive);
+                painter->setBrush(*brushActive);
+                painter->drawEllipse(0,0,2,2);
+                painter->drawEllipse(0+w/2,0,2,2);
+                painter->drawEllipse(0,0+h/2,2,2);
+                painter->drawEllipse(0+w/2,0+h/2,2,2);
 
-          painter->drawEllipse(0+w/4,0,2,2);
-          painter->drawEllipse(0+w/4,0+h/2,2,2);
-          painter->drawEllipse(0,0+h/4,2,2);
-          painter->drawEllipse(0+w/2,0+h/4,2,2);
-          painter->drawLine(0+w/4+2,0+h/4+2,0+w/4-2,0+h/4-2);
-          painter->drawLine(0+w/4-2,0+h/4+2,0+w/4+2,0+h/4-2);
+                painter->drawEllipse(0+w/4,0,2,2);
+                painter->drawEllipse(0+w/4,0+h/2,2,2);
+                painter->drawEllipse(0,0+h/4,2,2);
+                painter->drawEllipse(0+w/2,0+h/4,2,2);
+                painter->drawLine(0+w/4+2,0+h/4+2,0+w/4-2,0+h/4-2);
+                painter->drawLine(0+w/4-2,0+h/4+2,0+w/4+2,0+h/4-2);
+            }
+            else{
+                painter->setPen(*penActive);
+                painter->setBrush(*brushActive);
+                painter->drawEllipse(0,0,2,2);
+                painter->drawEllipse(0+w,0,2,2);
+                painter->drawEllipse(0,0+h,2,2);
+                painter->drawEllipse(0+w,0+h,2,2);
+
+                painter->drawEllipse(0+w/2,0,2,2);
+                painter->drawEllipse(0+w/2,0+h,2,2);
+                painter->drawEllipse(0,0+h/2,2,2);
+                painter->drawEllipse(0+w,0+h/2,2,2);
+                painter->drawLine(0+w/2+2,0+h/2+2,0+w/2-2,0+h/2-2);
+                painter->drawLine(0+w/2-2,0+h/2+2,0+w/2+2,0+h/2-2);
+            }
         }
 
 }

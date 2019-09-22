@@ -38,7 +38,7 @@ class ScreenScene : public QGraphicsScene{
     QPointF     previousPoint;
     QGraphicsLineItem * horizontalLine;
     QGraphicsLineItem * verticalLine;
-    QGraphicsItem *rectCentr;
+    QGraphicsItem *rectCentr,*rectBlackWin;
     QGraphicsRectItem * rectIteam[8];
     QGraphicsSimpleTextItem * textItem;
     int figure;

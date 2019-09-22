@@ -51,11 +51,12 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
         break;
     }
     case 9:{
-        v = new Sepia(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,pixmap);
+        v = new Sepia(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,pixmap,true);
         break;
     }
     case 10:{
-        v = new Text(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,0);
+        rectBlackWin->show();
+        v = new Sepia(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,pixmap,false);
         break;
     }
     case 11:{
@@ -244,6 +245,9 @@ ScreenScene::ScreenScene(){
     pixmap = screen->grabWindow(0);
     QCursor * cursor = new QCursor(QPixmap("cursors\\Precision"));
     pixIteam = this->addPixmap(pixmap);
+    rectBlackWin = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,100)),QBrush(QColor(0,0,0,150)));
+    rectBlackWin->hide();
+    rectBlackWin->setZValue(3);
     rectCentr = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,100)),QBrush(QColor(0,0,0,100)));
     QPen pen(Qt::white);
     pen.setWidthF(0.25);
