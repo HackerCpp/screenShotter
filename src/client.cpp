@@ -55,7 +55,7 @@ void Request::sendRequest(const QByteArray &method, const QByteArray &addr, QLis
 
 void Request::sent(QNetworkReply *reply){
     replyBody=reply->readAll();
-    qDebug() << replyBody;
+    //qDebug() << replyBody;
     replyHeaders=reply->rawHeaderList();
     for(int i=0;i<replyHeaders.count();i++){
         replyHeaders[i]=replyHeaders.at(i)+": "+reply->rawHeader(replyHeaders.at(i));

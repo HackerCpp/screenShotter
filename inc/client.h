@@ -13,9 +13,7 @@ public:
     explicit Request(bool syn=true, QObject *parent = 0);
     void sendRequest(const QByteArray &method, const QByteArray &addr, QList <QByteArray> &headers, const QByteArray &body);
     void setParametersForRequetsSlot(const QByteArray &method, const QByteArray &addr, QList <QByteArray> &headers, const QByteArray &body);
-    const QByteArray& getReply(){
-        return replyBody;
-    }
+    const QByteArray& getReply(){return replyBody;}
 
     QList<QByteArray> getReplyHeaders(){return replyHeaders;}
     int getError(){return replyError;}

@@ -37,7 +37,8 @@ src/figure/line.cpp\
 src/figure/ellips.cpp\
 src/figure/sepia.cpp\
 src/figure/text.cpp\
-    src/client.cpp
+    src/client.cpp \
+    src/communicationwithserver.cpp
 
 HEADERS += \
         inc/mainwindow.h \
@@ -51,7 +52,8 @@ inc/figure/line.h\
 inc/figure/ellips.h\
 inc/figure/sepia.h\
 inc/figure/text.h\
-    inc/client.h
+    inc/client.h \
+    inc/communicationwithserver.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
