@@ -38,7 +38,8 @@ src/figure/ellips.cpp\
 src/figure/sepia.cpp\
 src/figure/text.cpp\
     src/client.cpp \
-    src/communicationwithserver.cpp
+    src/communicationwithserver.cpp \
+    src/tabs/tabregistration.cpp
 
 HEADERS += \
         inc/mainwindow.h \
@@ -53,7 +54,8 @@ inc/figure/ellips.h\
 inc/figure/sepia.h\
 inc/figure/text.h\
     inc/client.h \
-    inc/communicationwithserver.h
+    inc/communicationwithserver.h \
+    inc/tabs/tabregistration.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
