@@ -3,20 +3,27 @@
 
 #include <QMainWindow>
 #include <QGraphicsView>
-#include "inc\screenscene.h"
+#include "inc/panel.h"
+#include "inc/tabs/tabregistration.h"
+#include "inc/tabs/tabgraphicseditor.h"
 
-class MainWindow : public QGraphicsView
-{
+class MainWindow : public QObject {
     Q_OBJECT
-    ScreenScene *scene;
-
-
-
+    TabGraphicsEditor *m_graphicsEditor;
+    Wind *m_wind;
+    TabRegistration * m_tabRegist;
 public:
-    MainWindow(QWidget *parent = 0);
+    MainWindow();
     ~MainWindow();
+
 public slots:
-    void hideCitrain();
+    void openUrl();
+    void copyUrl();
+    void startGraphicsEditFull();
+    void startGraphicsEditPart();
+    void programStart();
+    void deleteGrapgicsEditor();
+
 };
 
 #endif // MAINWINDOW_H

@@ -85,6 +85,12 @@ Wind::Wind(){
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(showWin()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(showWin()));
     connect(labelRight,SIGNAL(linkActivated(const QString&)),this,SLOT(destroy()));
+    connect(pushBtn[0],&QPushButton::clicked,this,&Wind::enterPartOfScreen);
+    connect(pushBtn[1],&QPushButton::clicked,this,&Wind::enterFullScrin);
+    connect(pushBtn[2],&QPushButton::clicked,this,&Wind::enterHistory);
+    connect(pushBtn[3],&QPushButton::clicked,this,&Wind::enterSettings);
+    connect(pushBtn[4],&QPushButton::clicked,this,&Wind::enterOpen);
+    connect(pushBtn[5],&QPushButton::clicked,this,&Wind::enterCopy);
     this->hide();
 }
 void Wind::hideWin(){
@@ -250,7 +256,7 @@ void Panel::checkBtns(){
     }
 }
 void Panel::checkBtnsOk(){
-
+    this->hide();
 }
 void Panel::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::LeftButton) {

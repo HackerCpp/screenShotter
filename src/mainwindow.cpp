@@ -1,37 +1,57 @@
-#include "inc\mainwindow.h"
-#include <QPixmap>
+#include "inc/mainwindow.h"
 #include <QApplication>
-#include <QScreen>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsRectItem>
-#include <QGraphicsScene>
-#include "inc\panel.h"
-#include "inc/tabs/tabregistration.h"
+#include <QDesktopServices>
+#include <QBuffer>
+#include <QClipboard>
 
+MainWindow::MainWindow(){
+    m_graphicsEditor = nullptr;
+    m_wind = nullptr;
+    m_tabRegist = new TabRegistration();
+    connect(this->m_tabRegist,&TabRegistration::endOfRegistration,this,&MainWindow::programStart);
+    m_tabRegist->connectServer();
+}
 
-MainWindow::MainWindow(QWidget *parent)
-    : QGraphicsView(parent){
-    //this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::Tool);
-    TabRegistration * tabRegist = new TabRegistration();
-    tabRegist->show();
-    Wind *wind = new Wind();
-    scene = new ScreenScene;
-    this->setScene(scene);
-    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
-    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
-    this->cursor().setPos(scene->width()/2,scene->height()/2);
-    //this->showFullScreen();
-    connect(scene->getPanel(),SIGNAL(enterBtn()),wind,SLOT(showWin()));
-    connect(scene->getPanel(),SIGNAL(enterBtn()),this,SLOT(hideCitrain()));
+void MainWindow::programStart(){
+    m_wind = new Wind();
+    connect(m_wind,&Wind::enterPartOfScreen,this,&MainWindow::startGraphicsEditPart);
+    connect(m_wind,&Wind::enterFullScrin,this,&MainWindow::startGraphicsEditFull);
+    connect(m_wind,&Wind::enterOpen,this,&MainWindow::openUrl);
+    connect(m_wind,&Wind::enterCopy,this,&MainWindow::copyUrl);
 }
-void MainWindow::hideCitrain(){
-    delete this->scene;
-    this->hide();
+QUrl getCurentUrl(){
+    QFile in( "QURL.dll" );
+    QUrl url;
+    if( in.open( QIODevice::ReadOnly ) ) {
+        QTextStream stream( &in );
+        url = stream.readAll().remove("\\");
+        in.close();
+    }
+    return url;
 }
-MainWindow::~MainWindow()
-{
+void MainWindow::openUrl(){
+    QDesktopServices::openUrl(getCurentUrl());
+}
+void MainWindow::copyUrl(){
+    QUrl url = getCurentUrl();
+    QString stringUrl =  url.toEncoded();
+    QApplication::clipboard()->setText(stringUrl);
+}
+void MainWindow::startGraphicsEditFull(){
+    m_wind->hide();
+    m_graphicsEditor = new TabGraphicsEditor(true);
+    connect(m_graphicsEditor,&TabGraphicsEditor::enterSavePixmap,this,&MainWindow::deleteGrapgicsEditor);
+}
+void MainWindow::startGraphicsEditPart(){
+    m_wind->hide();
+    m_graphicsEditor = new TabGraphicsEditor(false);
+    connect(m_graphicsEditor,&TabGraphicsEditor::enterSavePixmap,this,&MainWindow::deleteGrapgicsEditor);
+}
+void MainWindow::deleteGrapgicsEditor(){
+    if(m_graphicsEditor)
+        delete m_graphicsEditor;
+    m_wind->show();
+}
+MainWindow::~MainWindow(){
 
 }

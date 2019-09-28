@@ -6,6 +6,7 @@ CommunicationWithServer::CommunicationWithServer(){
 }
 bool CommunicationWithServer::registration(QByteArray email,QByteArray password,QByteArray phoneNumber){
     QList<QByteArray> header;
+    header.append("Content-Type: application/x-www-form-urlencoded");
     m_request->setParametersForRequetsSlot("POST","http://vasilevka.ru/api/users/add/",header,
       "email="+email+"&password="+password+"&phone="+phoneNumber);
     m_request->sendRequest();
@@ -20,6 +21,7 @@ bool CommunicationWithServer::registration(QByteArray email,QByteArray password,
 }
 bool CommunicationWithServer::authorization(QByteArray email,QByteArray password){
     QList<QByteArray> header;
+    header.append("Content-Type: application/x-www-form-urlencoded");
     m_request->setParametersForRequetsSlot("POST","http://vasilevka.ru/api/users/check/",header,
       "email="+email+"&password="+password);
     m_request->sendRequest();
@@ -34,6 +36,7 @@ bool CommunicationWithServer::authorization(QByteArray email,QByteArray password
 }
 bool CommunicationWithServer::isEmail(QByteArray email){
     QList<QByteArray> header;
+    header.append("Content-Type: application/x-www-form-urlencoded");
     m_request->setParametersForRequetsSlot("POST","http://vasilevka.ru/api/users/check/",header,
       "email="+email+"&action=searchuser");
     m_request->sendRequest();
@@ -79,7 +82,7 @@ QString CommunicationWithServer::sendPicture(QString email,QString password,QByt
     QByteArray reply = m_request->getReply();
     QByteArray result = reply.mid(reply.indexOf("\"result\":") + sizeof("\"result\":"),2);
     if(result == "ok"){
-        int indexBeginUrl = reply.indexOf("\"url\":\"")+sizeof ("\"url\":\"");
+        int indexBeginUrl = reply.indexOf("\"url\":\"")+sizeof ("\"url\":\"")-1;
         int sizeUrl = reply.indexOf(",",indexBeginUrl) - indexBeginUrl -1;
         QByteArray url = reply.mid(indexBeginUrl,sizeUrl);
         return url;

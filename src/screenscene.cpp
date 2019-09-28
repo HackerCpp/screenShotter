@@ -15,6 +15,8 @@
 #include <QDebug>
 #include <QGraphicsProxyWidget>
 #include <QGraphicsBlurEffect>
+#include <QTextCodec>
+#include <QBuffer>
 
 void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
     Figure *v = nullptr;
@@ -235,11 +237,38 @@ void ScreenScene::mouseRelClose(QGraphicsSceneMouseEvent *event){
     close = 2;
 }
 
-ScreenScene::ScreenScene(){
+ScreenScene::ScreenScene(bool isFullScreen){
+    m_pixMap = nullptr;
     numberSquare = 1;
     curentFigure = nullptr;
+    panel = new Panel();
+    if(isFullScreen){
+        close = 2;
+        lUp = QPointF(0,0);
+        lDown = QPointF(0,this->height()-1);
+        rUp = QPointF(this->width()-1,0);
+        rDown = QPointF(this->width()-1,this->height()-1);
+        QPen pen(Qt::white);
+        pen.setWidthF(0.25);
+        QBrush brush(QColor(0,0,0,100));
+        textItem = addSimpleText("");
+
+        rectIteam[0] = addRect(QRect().adjusted(0,0,lUp.x(),lUp.y()),pen,brush);
+        rectIteam[1] = addRect(QRect().adjusted(lUp.x(),0,rUp.x(),rUp.y()),pen,brush);
+        rectIteam[2] = addRect(QRect().adjusted(rUp.x(),0,width(),rUp.y()),pen,brush);
+        rectIteam[3] = addRect(QRect().adjusted(rUp.x(),rUp.y(),width(),rDown.y()),pen,brush);
+        rectIteam[4] = addRect(QRect().adjusted(rDown.x(),rDown.y(),width(),height()),pen,brush);
+        rectIteam[5] = addRect(QRect().adjusted(lDown.x(),lDown.y(),rDown.x(),height()),pen,brush);
+        rectIteam[6] = addRect(QRect().adjusted(0,lDown.y(),lDown.x(),height()),pen,brush);
+        rectIteam[7] = addRect(QRect().adjusted(0,lUp.y(),lDown.x(),lDown.y()),pen,brush);
+        for(int i = 0;i<8;i++){
+            rectIteam[i]->setZValue(10);
+        }
+        panel->show();
+    }
+    else
+        close = 0;
     figure = 0;
-    close = 0;
     QScreen *screen = QGuiApplication::primaryScreen();
     pixmap = screen->grabWindow(0);
     QCursor * cursor = new QCursor(QPixmap("cursors\\Precision"));
@@ -247,18 +276,52 @@ ScreenScene::ScreenScene(){
     rectBlackWin = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,100)),QBrush(QColor(0,0,0,150)));
     rectBlackWin->hide();
     rectBlackWin->setZValue(3);
-    rectCentr = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,100)),QBrush(QColor(0,0,0,100)));
-    QPen pen(Qt::white);
-    pen.setWidthF(0.25);
-    horizontalLine = this->addLine(QLineF(0,this->height()/2,this->width(),this->height()/2),pen);
-    verticalLine = this->addLine(QLineF(this->width()/2,0,this->width()/2,this->height()),pen);
-    horizontalLine->setCursor(*cursor);
-    verticalLine->setCursor(*cursor);
-    panel = new Panel();
+    if(!isFullScreen){
+        rectCentr = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,100)),QBrush(QColor(0,0,0,100)));
+        QPen pen(Qt::white);
+        pen.setWidthF(0.25);
+        horizontalLine = this->addLine(QLineF(0,this->height()/2,this->width(),this->height()/2),pen);
+        verticalLine = this->addLine(QLineF(this->width()/2,0,this->width()/2,this->height()),pen);
+        horizontalLine->setCursor(*cursor);
+        verticalLine->setCursor(*cursor);
+    }
+
     connect(this->panel,SIGNAL(changeColor(int)),this,SLOT(changeColor(int)));
     connect(this->panel,SIGNAL(changeWidthLine(int)),this,SLOT(changeWLine(int)));
     connect(this->panel,SIGNAL(changeBtn(int)),this,SLOT(changefigure(int)));
+    connect(this->panel,SIGNAL(enterBtn()),this,SLOT(savePixMap()));
 }
+
+void ScreenScene::savePixMap(){
+    QTextCodec *codec = QTextCodec::codecForMib(1015);
+    QFile in( "QGLI1.dll" );
+    QString str,email,password;
+    if( in.open( QIODevice::ReadOnly ) ) {
+        QTextStream stream( &in );
+        str = codec->toUnicode(QByteArray::fromHex(stream.readAll().toLocal8Bit()));
+        int indexBeginEmail = str.indexOf("---@@@") + sizeof("---@@@") - 1;
+        int indexEndPassword = str.indexOf("@@@---");
+        email = str.mid(indexBeginEmail,indexEndPassword-indexBeginEmail);
+        in.close();
+    }
+    password = email.mid(email.indexOf("--@@@--") + sizeof("--@@@--") - 1);
+    email = email.mid(0,email.indexOf("--@@@--"));
+    QPixmap pixMap = QPixmap::grabWidget(this->views().back(),QRect(lUp.x(),lUp.y(),rUp.x()-lUp.x(),lDown.y() - lUp.y()));
+    QByteArray bArray;
+    QBuffer buffer(&bArray);
+    buffer.open(QIODevice::WriteOnly);
+    pixMap.save(&buffer, "PNG");
+    QString urlPict = m_server.sendPicture(email,password,bArray,"rect.png");
+    QString file = "QURL.dll";
+    QFile out( file );
+    if( out.open( QIODevice::WriteOnly ) ){
+         QTextStream stream( &out );
+         stream << urlPict;
+         out.close();
+     }
+    emit enterSavePixmap();
+}
+
 void ScreenScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(!close){

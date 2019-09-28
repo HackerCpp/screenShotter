@@ -39,7 +39,8 @@ src/figure/sepia.cpp\
 src/figure/text.cpp\
     src/client.cpp \
     src/communicationwithserver.cpp \
-    src/tabs/tabregistration.cpp
+    src/tabs/tabregistration.cpp \
+    src/tabs/tabgraphicseditor.cpp
 
 HEADERS += \
         inc/mainwindow.h \
@@ -55,7 +56,8 @@ inc/figure/sepia.h\
 inc/figure/text.h\
     inc/client.h \
     inc/communicationwithserver.h \
-    inc/tabs/tabregistration.h
+    inc/tabs/tabregistration.h \
+    inc/tabs/tabgraphicseditor.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

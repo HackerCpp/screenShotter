@@ -32,6 +32,13 @@ class Wind : public QWidget{
 public:
     Wind();
     ~Wind();
+signals:
+    void enterFullScrin();
+    void enterPartOfScreen();
+    void enterSettings();
+    void enterHistory();
+    void enterOpen();
+    void enterCopy();
 public slots:
     void hideWin();
     void showWin();

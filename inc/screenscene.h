@@ -9,6 +9,7 @@
 #include <QGraphicsSimpleTextItem>
 #include <QGraphicsItem>
 #include "inc\figure\figure.h"
+#include "inc/communicationwithserver.h"
 
 class ScreenScene : public QGraphicsScene{
     Q_OBJECT
@@ -25,6 +26,7 @@ class ScreenScene : public QGraphicsScene{
     int curentZ;
     float x,y,w,h;
     int isClose;
+    QPixmap *m_pixMap;
     QPointF lUp,lDown,rUp,rDown;
     QPointF beginPoint,prevPoint;
     bool dravTekst;
@@ -41,6 +43,7 @@ class ScreenScene : public QGraphicsScene{
     QGraphicsItem *rectCentr,*rectBlackWin;
     QGraphicsRectItem * rectIteam[8];
     QGraphicsSimpleTextItem * textItem;
+    CommunicationWithServer m_server;
     int figure;
     void mouseClkClose(QGraphicsSceneMouseEvent *event);
     void mouseClkOpen(QGraphicsSceneMouseEvent *event);
@@ -50,13 +53,16 @@ class ScreenScene : public QGraphicsScene{
     void mouseRelClose(QGraphicsSceneMouseEvent *event);
     void newFigure(QGraphicsSceneMouseEvent *event);
 public:
-    ScreenScene();
+    ScreenScene(bool isFullScreen);
     Panel * getPanel(){return panel;}
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     ~ScreenScene();
+signals:
+    void enterSavePixmap();
 public slots:
+    void savePixMap();
     void changeColor(int index);
     void changeWLine(int index);
     void changefigure(int index){figure = index;}
