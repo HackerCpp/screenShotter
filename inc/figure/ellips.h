@@ -11,7 +11,7 @@ class Ellips : public Figure {
     void transformation(QGraphicsSceneMouseEvent *event);
 public:
     Ellips(int x,int y,int width, int height,QPen pen);
-
+    bool isPointColor(QPoint p);
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);

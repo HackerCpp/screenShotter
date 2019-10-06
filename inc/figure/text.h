@@ -12,7 +12,7 @@ class Text : public Figure , public QGraphicsTextItem {
     void transformation(QGraphicsSceneMouseEvent *event);
 public:
     Text(int x,int y,int width, int height,QPen pen,int number);
-
+    //void setCursorP(QPointF pos);
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);

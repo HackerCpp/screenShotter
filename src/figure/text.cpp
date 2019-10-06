@@ -17,7 +17,9 @@ m_x =x;m_y = y;m_w = width;m_h = height;
     close = true;
     prevPoints = QPointF(x,y);
 }
+/*void Text::setCursorP(QPointF pos){
 
+}*/
 void Text::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
         //if(isActive){
         //}

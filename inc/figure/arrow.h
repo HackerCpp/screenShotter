@@ -15,7 +15,7 @@ class Arrow : public Figure {
     void transformationTwo(QGraphicsSceneMouseEvent *event);
 public:
     Arrow(int x,int y,int width, int height,QPen pen);
-
+    bool isPointColor(QPoint p);
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);

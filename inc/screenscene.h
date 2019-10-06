@@ -45,6 +45,9 @@ class ScreenScene : public QGraphicsScene{
     QGraphicsSimpleTextItem * textItem;
     CommunicationWithServer m_server;
     int figure;
+    QList<QGraphicsItem *>  listItems;
+    QList<QGraphicsItem *> listItemsDeleted;
+    int curentItems;
     void mouseClkClose(QGraphicsSceneMouseEvent *event);
     void mouseClkOpen(QGraphicsSceneMouseEvent *event);
     void mouseMoveBegin(QGraphicsSceneMouseEvent *event);
@@ -53,6 +56,7 @@ class ScreenScene : public QGraphicsScene{
     void mouseRelClose(QGraphicsSceneMouseEvent *event);
     void newFigure(QGraphicsSceneMouseEvent *event);
 public:
+    QPixmap getCleanPixmap(){return pixmap;}
     ScreenScene(bool isFullScreen);
     Panel * getPanel(){return panel;}
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -62,10 +66,12 @@ public:
 signals:
     void enterSavePixmap();
 public slots:
+    void hideLastFigure();
+    void showLastFigure();
     void savePixMap();
     void changeColor(int index);
     void changeWLine(int index);
-    void changefigure(int index){figure = index;}
+    void changefigure(int index);
 };
 
 #endif // SCREENSCENE_H

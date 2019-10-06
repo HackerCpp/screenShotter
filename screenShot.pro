@@ -40,7 +40,10 @@ src/figure/text.cpp\
     src/client.cpp \
     src/communicationwithserver.cpp \
     src/tabs/tabregistration.cpp \
-    src/tabs/tabgraphicseditor.cpp
+    src/tabs/tabgraphicseditor.cpp \
+    src/tabs/window.cpp \
+    src/tabs/tabsettings.cpp \
+    src/tabs/tabbase.cpp
 
 HEADERS += \
         inc/mainwindow.h \
@@ -57,7 +60,10 @@ inc/figure/text.h\
     inc/client.h \
     inc/communicationwithserver.h \
     inc/tabs/tabregistration.h \
-    inc/tabs/tabgraphicseditor.h
+    inc/tabs/tabgraphicseditor.h \
+    inc/tabs/window.h \
+    inc/tabs/tabsettings.h \
+    inc/tabs/tabbase.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

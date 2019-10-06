@@ -12,7 +12,7 @@ class Curtain : public Figure {
     void transformation(QGraphicsSceneMouseEvent *event);
 public:
     Curtain(int x,int y,int width, int height,QPen pen,int number);
-
+    bool isPointColor(QPoint p);
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);

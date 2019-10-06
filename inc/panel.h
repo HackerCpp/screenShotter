@@ -13,43 +13,11 @@
 #include <QSystemTrayIcon>
 #include <QVector>
 
-class Wind : public QWidget{
-     Q_OBJECT
-
-
-    QSystemTrayIcon *trayIcon;
-    QHBoxLayout *headerLayout;
-    QLabel * headerLabelIcon,*headerLabelText;
-    QPushButton * headerBtn;
-    QVBoxLayout * mainVBoxLayout;
-    QGridLayout * gridLayoutUp;
-    QHBoxLayout * hBoxLayoutAver,*hBoxLayoutDown;
-    QGroupBox * groupBoxUp,* groupBoxAver;
-    QWidget * downWidg;
-    QPushButton * pushBtn[6];
-    QLabel * labelleft,*labelRight;
-    void setObgectName();
-public:
-    Wind();
-    ~Wind();
-signals:
-    void enterFullScrin();
-    void enterPartOfScreen();
-    void enterSettings();
-    void enterHistory();
-    void enterOpen();
-    void enterCopy();
-public slots:
-    void hideWin();
-    void showWin();
-    void destroy();
-};
 
 
 
 
-class Panel : public QWidget
-{
+class Panel : public QWidget{
     Q_OBJECT
 
     int thisWidth,thisHeight;
@@ -69,19 +37,23 @@ class Panel : public QWidget
     QPushButton *btnEnter;
     QPushButton *btnMenu;
 
-    QWidget * leftWidg;
-    QVBoxLayout * leftLayout;
-    QPushButton * leftBtn;
+    QWidget *leftWidg;
+    QVBoxLayout *leftLayout;
+    QPushButton *leftBtn;
+    QPushButton *deleteBtn;
+    QPushButton *bringbackBtn;
 
     QGridLayout *vBoxLayout;
     QHBoxLayout *hBoxLayout;
     QToolBar * toolBar;
-
+    QRect m_size;
     QWidget *leftBtnsWidg;
     QHBoxLayout *leftBtnsLayuot;
 
     void setObgectName();
+
 public:
+    void controlPosition();
     explicit Panel(QWidget *parent = nullptr);
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -93,6 +65,8 @@ signals:
     void changeColor(int value);
     void changeWidthLine(int value);
     void changeBtn(int btn);
+    void hideLastFigure();
+    void showLastFigure();
 
 public slots:
     void showHideDown();

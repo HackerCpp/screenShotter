@@ -11,128 +11,44 @@
 #include <QTime>
 #include <QMouseEvent>
 
-
-void Wind::setObgectName(){
-    headerBtn->setObjectName("qwit");
-    groupBoxUp->setObjectName("grBoxUp");
-    groupBoxAver->setObjectName("grBoxAv");
-
-}
-
-Wind::Wind(){
-    trayIcon = new QSystemTrayIcon(QIcon("pict\\aver.ico"));
-    trayIcon->show();
-    QRect size = QApplication::screens().at(0)->geometry();
-    this->setWindowIcon(QIcon("pict\\aver.ico"));
-    this->setWindowTitle("title");
-    this->setWindowFlags(Qt::SplashScreen | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
-    int thisWidth = size.width()/8;
-    int thisHeight = size.height()/2 - size.height()/10;
-    for(int i = 0; i < 6; i++){
-        pushBtn[i] = new QPushButton;
-        pushBtn[i]->setFixedSize(thisWidth/3,thisHeight/5);
-        pushBtn[i]->setObjectName("enter" + QString::number(i));
-    }
-    headerLayout = new QHBoxLayout;
-    headerLabelIcon = new QLabel();
-    headerLabelIcon->setPixmap(QPixmap("pict\\aver.ico").scaled(30,30));
-    headerLabelText = new QLabel("Title");
-    headerBtn = new QPushButton;
-    headerBtn->setFixedSize(thisWidth/9,thisWidth/9);
-    //headerBtn->setIcon(QPixmap("icon\\del.png"));
-    headerLayout->addWidget(headerLabelIcon);
-    headerLayout->addWidget(headerLabelText);
-    headerLayout->addWidget(headerBtn);
-
-    mainVBoxLayout = new QVBoxLayout;
-    gridLayoutUp = new QGridLayout;
-    hBoxLayoutAver = new QHBoxLayout;
-    hBoxLayoutDown = new QHBoxLayout;
-    groupBoxUp = new QGroupBox;
-    groupBoxAver = new QGroupBox;
-    downWidg = new QWidget;
-    labelleft = new QLabel("<a href='https://kwork.ru'>помощь</a>");
-    labelRight = new QLabel("<a href='https://kwork.ru'>выход</a>");
-    labelRight->setOpenExternalLinks(false);
-    labelleft->setOpenExternalLinks(false);
-    labelRight->setTextInteractionFlags( Qt::LinksAccessibleByMouse);
-    this->setLayout(mainVBoxLayout);
-    mainVBoxLayout->addLayout(headerLayout);
-    mainVBoxLayout->addWidget(groupBoxUp);
-    mainVBoxLayout->addWidget(groupBoxAver);
-    mainVBoxLayout->addWidget(downWidg);
-    groupBoxUp->setLayout(gridLayoutUp);
-    groupBoxAver->setLayout(hBoxLayoutAver);
-    downWidg->setLayout(hBoxLayoutDown);
-    gridLayoutUp->addWidget(pushBtn[0],0,1);
-    gridLayoutUp->addWidget(pushBtn[1],0,2);
-    gridLayoutUp->addWidget(pushBtn[2],1,1);
-    gridLayoutUp->addWidget(pushBtn[3],1,2);
-    hBoxLayoutAver->addWidget(pushBtn[4]);
-    hBoxLayoutAver->addWidget(pushBtn[5]);
-    hBoxLayoutDown->addStretch(20);
-    hBoxLayoutDown->addWidget(labelleft);
-    hBoxLayoutDown->addWidget(labelRight);
-    hBoxLayoutDown->addStretch(20);
-    labelleft->setOpenExternalLinks(true);
-    //gridLayoutUp->setMargin(0);
-    //hBoxLayoutAver->setMargin(0);
-    mainVBoxLayout->setMargin(4);
-    this->setFixedSize(thisWidth,thisHeight);
-    this->move(size.width()-thisWidth-40 ,size.height() - thisHeight-100);
-    setObgectName();
-    connect(headerBtn, SIGNAL(clicked()), this, SLOT(hideWin()));
-    connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(showWin()));
-    connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(showWin()));
-    connect(labelRight,SIGNAL(linkActivated(const QString&)),this,SLOT(destroy()));
-    connect(pushBtn[0],&QPushButton::clicked,this,&Wind::enterPartOfScreen);
-    connect(pushBtn[1],&QPushButton::clicked,this,&Wind::enterFullScrin);
-    connect(pushBtn[2],&QPushButton::clicked,this,&Wind::enterHistory);
-    connect(pushBtn[3],&QPushButton::clicked,this,&Wind::enterSettings);
-    connect(pushBtn[4],&QPushButton::clicked,this,&Wind::enterOpen);
-    connect(pushBtn[5],&QPushButton::clicked,this,&Wind::enterCopy);
-    this->hide();
-}
-void Wind::hideWin(){
-    this->hide();
-}
-void Wind::showWin(){
-    if(this->isVisible())
-        return;
-    QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
-    animation->setDuration(500);
-    animation->setStartValue(QRect(this->pos().x(), this->pos().y() + this->height(), this->width(), this->width()));
-    animation->setEndValue(QRect(this->pos().x(), this->pos().y(), this->width(), this->height()));
-    animation->start();
-    this->show();
-}
-void Wind::destroy(){
-    this->deleteLater();
-}
-Wind::~Wind(){
-    this->trayIcon->hide();
-    delete this->trayIcon;
-    this->deleteLater();
-    qApp->quit();
-}
-
 void Panel::setObgectName(){
    slyderColor->setObjectName("sliderColor");
    up->setObjectName("UpWidget");
    down->setObjectName("DownWidget");
    leftBtnsWidg->setObjectName("LeftBtns");
    rBtnW->setObjectName("RightBtns");
+   deleteBtn->setObjectName("hideFigure");
+   bringbackBtn->setObjectName("showFigure");
+   btn->data()[0]->setObjectName("btnCursor");
+   btn->data()[1]->setObjectName("btnPen");
+   btn->data()[2]->setObjectName("btnBrush");
+   btn->data()[3]->setObjectName("btnLine");
+   btn->data()[4]->setObjectName("btnArrow");
+   btn->data()[5]->setObjectName("btnEllipse");
+   btn->data()[6]->setObjectName("btnRect");
+   btn->data()[7]->setObjectName("btnNumb");
+   btn->data()[8]->setObjectName("btnSep");
+   btn->data()[9]->setObjectName("btnCitr");
+   btn->data()[10]->setObjectName("btnText");
+   btnEnter->setObjectName("btnEnter");
+   btnMenu->setObjectName("btnMenu");
 }
 
 Panel::Panel(QWidget *parent) : QWidget(parent){
-    QRect size = QApplication::screens().at(0)->geometry();
-    thisWidth = size.width()/2;
-    thisHeight = size.height()/8;
+    m_size = QApplication::screens().at(0)->geometry();
+    thisWidth = m_size.width()/2;
+    thisHeight = m_size.height()/8;
     slyderColor = new QSlider(Qt::Horizontal);
     slyderColor->setMaximum(35);
     slyderThickness = new QSlider(Qt::Horizontal);
     slyderThickness->setMaximum(255);
     slydersLayout = new QHBoxLayout();
+    this->deleteBtn = new QPushButton();
+    this->bringbackBtn = new QPushButton();
+    deleteBtn->setFixedSize(thisWidth/18,thisHeight/2 - thisHeight/20);
+    bringbackBtn->setFixedSize(thisWidth/18,thisHeight/2 - thisHeight/20);
+    slydersLayout->addWidget(deleteBtn);
+    slydersLayout->addWidget(bringbackBtn);
     slydersLayout->addWidget(slyderColor);
     slydersLayout->addSpacing(50);
     slydersLayout->addWidget(slyderThickness);
@@ -190,10 +106,10 @@ Panel::Panel(QWidget *parent) : QWidget(parent){
     leftBtnsLayuot->addWidget(toolBar);
     leftBtnsWidg->setFixedSize(thisWidth -  thisWidth/5,thisHeight/2);
 
-    rBtnW->setFixedSize(thisWidth/15+thisWidth/25,thisHeight/2);
+    rBtnW->setFixedSize(thisWidth/18+thisWidth/25,thisHeight/2);
     this->setLayout(vBoxLayout);
     btnEnter->setFixedSize(thisWidth/14,thisHeight/2);
-    btnMenu->setFixedSize(thisWidth/25,thisHeight/2);
+    btnMenu->setFixedSize(thisWidth/35,thisHeight/2);
 
     hBoxLayout->addWidget(leftBtnsWidg);
     hBoxLayout->addStretch(50);
@@ -214,16 +130,20 @@ Panel::Panel(QWidget *parent) : QWidget(parent){
     }
     connect(this->btnEnter, SIGNAL(clicked()), this, SLOT(checkBtnsOk()));
     connect(this->btnEnter, SIGNAL(clicked()), this, SIGNAL(enterBtn()));
+    connect(this->deleteBtn, SIGNAL(clicked()), this, SIGNAL(hideLastFigure()));
+    connect(this->bringbackBtn, SIGNAL(clicked()), this, SIGNAL(showLastFigure()));
     connect(this->slyderColor,SIGNAL(valueChanged(int)),this,SIGNAL(changeColor(int)));
     connect(this->slyderThickness,SIGNAL(valueChanged(int)),this,SIGNAL(changeWidthLine(int)));
     showDown = false;
     showHideDown();
     active=false;
+    controlPosition();
 }
 
 void Panel::showHideDown(){
     QPropertyAnimation *animation = new QPropertyAnimation(down, "geometry");
     if(showDown){
+        this->leftBtn->setIcon(QIcon("pict/openD.ico"));
         animation->setDuration(1000);
         animation->setStartValue(QRect(0, thisHeight - thisHeight/2, down->width(), down->width()));
         animation->setEndValue(QRect(0, 10, down->width(), down->height()));
@@ -231,6 +151,7 @@ void Panel::showHideDown(){
         showDown = false;
     }
     else{
+        this->leftBtn->setIcon(QIcon("pict/closeU.ico"));
         animation->setDuration(1000);
         animation->setStartValue(QRect(0, 10, down->width(), down->height()));
         animation->setEndValue(QRect(0, thisHeight - thisHeight/2, down->width(), down->width()));
@@ -264,12 +185,21 @@ void Panel::mousePressEvent(QMouseEvent *event){
         this->previousPoint = event->globalPos();
     }
 }
-
+void Panel::controlPosition(){
+    if(this->pos().x() < 0)
+        this->move(0,this->pos().y());
+    if(this->pos().y() < 0)
+        this->move(this->pos().x(),0);
+    if((this->pos().x()+width())> m_size.width())
+        this->move(m_size.width()-width(),this->pos().y());
+    if(this->pos().y() + (height()/2) > m_size.height())
+        this->move(this->pos().x(),m_size.height()-(height()/2));
+}
 void Panel::mouseMoveEvent(QMouseEvent *event){
     if(active){
-            int dt = previousPoint.x() - event->globalX();
             QPoint d = previousPoint - event->globalPos();
             this->move(this->pos() - d);
+            controlPosition();
     }
     this->previousPoint = event->globalPos();
 }

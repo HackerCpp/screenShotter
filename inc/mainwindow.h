@@ -6,6 +6,7 @@
 #include "inc/panel.h"
 #include "inc/tabs/tabregistration.h"
 #include "inc/tabs/tabgraphicseditor.h"
+#include "inc/tabs/window.h"
 
 class MainWindow : public QObject {
     Q_OBJECT
@@ -19,6 +20,7 @@ public:
 public slots:
     void openUrl();
     void copyUrl();
+    void openHistory();
     void startGraphicsEditFull();
     void startGraphicsEditPart();
     void programStart();

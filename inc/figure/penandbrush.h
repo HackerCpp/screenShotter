@@ -17,10 +17,10 @@ class PenAndBrush : public Figure{
 
 public:
     PenAndBrush(int x,int y,QPen pen,bool isPen);
+    //void setCursorP(QPointF pos);
+    bool isPointColor(QPoint p);
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*);
-    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);

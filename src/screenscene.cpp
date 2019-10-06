@@ -17,11 +17,10 @@
 #include <QGraphicsBlurEffect>
 #include <QTextCodec>
 #include <QBuffer>
+#include <QEvent>
 
 void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
     Figure *v = nullptr;
-    if(curentFigure)
-        curentFigure->setActive(false);
     switch (figure) {
     case 2:{
         v = new PenAndBrush(event->scenePos().x(),event->scenePos().y(),m_pen,true);
@@ -65,21 +64,38 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
         break;
     }
     default:{
-        if(curentFigure)
-            curentFigure->setActive(false);
-
-        this->curentFigure = dynamic_cast<Figure*>(itemAt(event->scenePos(),QTransform()));
-        if(curentFigure){
-            curentFigure->setActive(true);
+        QList<QGraphicsItem *> itemList = items(event->scenePos());
+        bool isFigure = false;
+        foreach(QGraphicsItem *value,itemList){
+            Figure * fig = dynamic_cast<Figure*>(value);
+            if(fig){
+                if(fig->isPointColor(QPoint(event->scenePos().x(),event->scenePos().y()))){
+                    isFigure = true;
+                    if(curentFigure != fig){
+                        curentFigure->setActive(false);
+                        curentFigure->setCursorP(QPointF(0,0));
+                        this->curentFigure = fig;
+                    }
+                    this->curentFigure->setActive(true);
+                    break;
+                }
+             }
         }
+        if(!isFigure)
+            if(curentFigure){
+                this->curentFigure->setActive(false);
+                curentFigure->setCursorP(QPointF(0,0));
+            }
         this->left_mouse = true;
-        update();
         QGraphicsScene::mousePressEvent(event);
         break;
     }
     }
 
     if(v){
+        listItems.push_back(v);
+        if(curentFigure)
+            curentFigure->setActive(false);
         curentFigure = v;
         addItem(v);
         v->show();
@@ -180,6 +196,7 @@ void ScreenScene::mouseMoveOpen(QGraphicsSceneMouseEvent *event){
         update();
         return;
     }
+
      QPointF p = prevPoint - event->scenePos();
      if(prevPoint.x() < lUp.x()){
          lUp.setX(lUp.x()-p.x());
@@ -232,8 +249,8 @@ void ScreenScene::mouseRelClose(QGraphicsSceneMouseEvent *event){
     rectIteam[6]->setCursor(QCursor(QPixmap("cursors\\DiagonalResize2")));
     rectIteam[7]->setCursor(QCursor(QPixmap("cursors\\HorizontalResize")));
     panel->setGeometry(event->scenePos().x() - panel->width(),event->scenePos().y() + 30,panel->width(),panel->height());
-    //panelItem->setPos(event->scenePos().x() - panel->width(),event->scenePos().y() + 30);
     panel->show();
+    panel->controlPosition();
     close = 2;
 }
 
@@ -242,6 +259,7 @@ ScreenScene::ScreenScene(bool isFullScreen){
     numberSquare = 1;
     curentFigure = nullptr;
     panel = new Panel();
+    curentItems = -1;
     if(isFullScreen){
         close = 2;
         lUp = QPointF(0,0);
@@ -275,7 +293,7 @@ ScreenScene::ScreenScene(bool isFullScreen){
     pixIteam = this->addPixmap(pixmap);
     rectBlackWin = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,100)),QBrush(QColor(0,0,0,150)));
     rectBlackWin->hide();
-    rectBlackWin->setZValue(3);
+    rectBlackWin->setZValue(0);
     if(!isFullScreen){
         rectCentr = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,100)),QBrush(QColor(0,0,0,100)));
         QPen pen(Qt::white);
@@ -285,11 +303,14 @@ ScreenScene::ScreenScene(bool isFullScreen){
         horizontalLine->setCursor(*cursor);
         verticalLine->setCursor(*cursor);
     }
+    m_pen.setWidth(2);
 
     connect(this->panel,SIGNAL(changeColor(int)),this,SLOT(changeColor(int)));
     connect(this->panel,SIGNAL(changeWidthLine(int)),this,SLOT(changeWLine(int)));
     connect(this->panel,SIGNAL(changeBtn(int)),this,SLOT(changefigure(int)));
     connect(this->panel,SIGNAL(enterBtn()),this,SLOT(savePixMap()));
+    connect(this->panel,SIGNAL(hideLastFigure()),this,SLOT(hideLastFigure()));
+    connect(this->panel,SIGNAL(showLastFigure()),this,SLOT(showLastFigure()));
 }
 
 void ScreenScene::savePixMap(){
@@ -324,6 +345,7 @@ void ScreenScene::savePixMap(){
 
 void ScreenScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+
     if(!close){
        mouseClkClose(event);
     }
@@ -336,10 +358,18 @@ void ScreenScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         mouseClkOpen(event);
     }
 }
-
+void ScreenScene::changefigure(int index){
+    figure = index;
+    if(curentFigure){
+        curentFigure->setActive(false);
+        curentFigure->setCursorP(QPointF(0,0));
+    }
+}
 void ScreenScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+
    if(!close){
         mouseMoveBegin(event);
+        update();
     }
    else if(close == 1){
        if(left_mouse){
@@ -349,7 +379,20 @@ void ScreenScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
    else if (close == 2){
        if(left_mouse){
            mouseMoveOpen(event);
-        }
+       }
+       else{
+           if(figure == 1){
+                QList<QGraphicsItem *> itemList = items(event->scenePos());
+                foreach(QGraphicsItem *value,itemList){
+                    Figure * fig = dynamic_cast<Figure*>(value);
+                    if(fig){
+                        if(fig->setCursorP(event->scenePos())){
+                            return;
+                        }
+                    }
+                }
+           }
+       }
    }
 }
 void ScreenScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
@@ -366,6 +409,7 @@ void ScreenScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     }
     update();
 }
+
 void ScreenScene::changeColor(int index){
     if(index < 36 & index > -1)
         this->m_pen.setColor(tableColor[index]);
@@ -374,10 +418,26 @@ void ScreenScene::changeColor(int index){
     update();
 }
 void ScreenScene::changeWLine(int index){
-    this->m_pen.setWidthF(index/10);
+    this->m_pen.setWidthF(index/10+2);
     if(curentFigure)
         curentFigure->setWidthLine(index/10);
     update();
+}
+void ScreenScene::hideLastFigure(){
+    if(this->listItems.isEmpty())
+        return;
+    this->listItemsDeleted.push_back(this->listItems.last());
+    this->listItems.last() = nullptr;
+    this->listItems.pop_back();
+    this->listItemsDeleted.last()->hide();
+}
+void ScreenScene::showLastFigure(){
+    if(this->listItemsDeleted.isEmpty())
+        return;
+    listItems.push_back(listItemsDeleted.last());
+    listItemsDeleted.last() = nullptr;
+    listItemsDeleted.pop_back();
+    listItems.last()->show();
 }
 ScreenScene::~ScreenScene(){
     delete this->panel;

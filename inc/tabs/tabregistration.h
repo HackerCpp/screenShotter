@@ -9,19 +9,20 @@
 #include <QPushButton>
 #include <QSplitter>
 #include "inc/communicationwithserver.h"
+#include "inc/tabs/tabbase.h"
 
-class TabRegistration : public QWidget{
+class TabRegistration : public TabBase{
     Q_OBJECT
     CommunicationWithServer * m_server;
     QGroupBox * mainGroupBox;
-    QVBoxLayout *mainVBoxLayout,*groupBoxLayout;
+    QVBoxLayout *groupBoxLayout;
     QLabel * entryEmailLabel,*registrationLabel,*entryPassword,
     *eMailLabel,*passwordLabel,*passwordTwoLabel,*phoneLabel;
     QLineEdit * emailLineEdit,*passwordLineEdit,*passwordTwoLineEdit,*phoneLineEdit;
     QPushButton * registrationBtn,*autorizationBtn,*continueBtn;
     QWidget * widgAuthorSocSet;
 public:
-    explicit TabRegistration(QWidget *parent = nullptr);
+    explicit TabRegistration();
     void showRegistration();
     void showAutorization();
     void showEntryEmail();

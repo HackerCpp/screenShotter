@@ -111,7 +111,36 @@ m_x =x;m_y = y;m_w = width;m_h = height;
     heightmin = 14;
     heightmax = 15;
 }
+bool Arrow::isPointColor(QPoint p){
+    QImage image(scene()->width(),scene()->height(), QImage::Format_RGB32);
+    image.fill(nullptr);
+    QPainter painter(&image);
+    QPen pe(Qt::white);
+    pe.setWidth(pen->width());
+    painter.setPen(pe);
+    painter.setBrush(QBrush(Qt::white));
+    painter.translate(m_translateX,m_translateY);
+    painter.rotate(m_angX);
+    painter.drawPolygon(QPolygon(*m_pointsBegin));
+    if(isActive){
+      painter.drawEllipse(m_pointsBegin->data()[4].x()-5,m_pointsBegin->data()[4].y()-5,5,5);
+      painter.drawEllipse(m_pointsBegin->data()[0].x()-5,m_pointsBegin->data()[0].x()-5,5,5);
+      painter.drawLine(m_pointsBegin->data()[4].x()+((m_pointsBegin->data()[0].x()-m_pointsBegin->data()[4].x())/2)-5,
+                        m_pointsBegin->data()[4].y()+((m_pointsBegin->data()[0].y()-m_pointsBegin->data()[4].y())/2)-5,
+                        m_pointsBegin->data()[4].x()+((m_pointsBegin->data()[0].x()-m_pointsBegin->data()[4].x())/2)+5,
+                        m_pointsBegin->data()[4].y()+((m_pointsBegin->data()[0].y()-m_pointsBegin->data()[4].y())/2)+5);
+      painter.drawLine(m_pointsBegin->data()[4].x()+((m_pointsBegin->data()[0].x()-m_pointsBegin->data()[4].x())/2)-5,
+                        m_pointsBegin->data()[4].y()+((m_pointsBegin->data()[0].y()-m_pointsBegin->data()[4].y())/2)+5,
+                        m_pointsBegin->data()[4].x()+((m_pointsBegin->data()[0].x()-m_pointsBegin->data()[4].x())/2)+5,
+                        m_pointsBegin->data()[4].y()+((m_pointsBegin->data()[0].y()-m_pointsBegin->data()[4].y())/2)-5);
 
+    }
+    QColor posColor = QColor(image.pixel(p.x(),p.y()));
+    if (posColor == Qt::white){
+         return true;
+    }
+    return false;
+}
 void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
     //painter->drawRect(boundingRect());
         painter->translate(m_translateX,m_translateY);

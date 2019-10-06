@@ -4,14 +4,14 @@
 #include "inc\figure\figure.h"
 #include <QColor>
 
-class Line : public Figure {
+class Line : public Figure{
     QPointF prevPoints;
     bool close;
 
     void transformation(QGraphicsSceneMouseEvent *event);
 public:
     Line(int x,int y,int width, int height,QPen pen);
-
+    bool isPointColor(QPoint p);
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);

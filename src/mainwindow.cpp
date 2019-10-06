@@ -18,6 +18,7 @@ void MainWindow::programStart(){
     connect(m_wind,&Wind::enterFullScrin,this,&MainWindow::startGraphicsEditFull);
     connect(m_wind,&Wind::enterOpen,this,&MainWindow::openUrl);
     connect(m_wind,&Wind::enterCopy,this,&MainWindow::copyUrl);
+    connect(m_wind,&Wind::enterHistory,this,&MainWindow::openHistory);
 }
 QUrl getCurentUrl(){
     QFile in( "QURL.dll" );
@@ -31,6 +32,9 @@ QUrl getCurentUrl(){
 }
 void MainWindow::openUrl(){
     QDesktopServices::openUrl(getCurentUrl());
+}
+void MainWindow::openHistory(){
+    QDesktopServices::openUrl(QUrl("http://vasilevka.ru/api/screenshots/history/"));
 }
 void MainWindow::copyUrl(){
     QUrl url = getCurentUrl();

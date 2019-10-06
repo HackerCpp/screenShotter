@@ -10,6 +10,7 @@ TabGraphicsEditor::TabGraphicsEditor(bool isFullScreen,QWidget *parent)
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
     this->cursor().setPos(m_scene->width()/2,m_scene->height()/2);
     this->showFullScreen();
+    this->show();
     connect(m_scene,SIGNAL(enterSavePixmap()),this,SIGNAL(enterSavePixmap()));
 }
 

@@ -16,7 +16,33 @@ m_x =x;m_y = y;m_w = width;m_h = height;
     close = true;
     prevPoints = QPointF(x,y);
 }
+bool Ellips::isPointColor(QPoint p){
+    QImage image(scene()->width(),scene()->height(), QImage::Format_RGB32);
+    image.fill(nullptr);
+    QPainter painter(&image);
+    QPen pe(Qt::white);
+    pe.setWidth(pen->width());
+    painter.setPen(pe);
+    painter.drawEllipse(m_x,m_y,m_w,m_h);
+    if(isActive){
+      painter.drawEllipse(m_x-5,m_y-5,10,10);
+      painter.drawEllipse(m_x+m_w-5,m_y-5,10,10);
+      painter.drawEllipse(m_x-5,m_y+m_h-5,10,10);
+      painter.drawEllipse(m_x+m_w-5,m_y+m_h-5,10,10);
 
+      painter.drawEllipse(m_x+m_w/2,m_y-5,10,10);
+      painter.drawEllipse(m_x+m_w/2,m_y+m_h-5,10,10);
+      painter.drawEllipse(m_x-5,m_y+m_h/2,10,10);
+      painter.drawEllipse(m_x+m_w-5,m_y+m_h/2,10,10);
+      painter.drawLine(m_x+m_w/2-5,m_y+m_h/2-5,m_x+m_w/2+5,m_y+m_h/2+5);
+      painter.drawLine(m_x+m_w/2-5,m_y+m_h/2+5,m_x+m_w/2+5,m_y+m_h/2-5);
+    }
+    QColor posColor = QColor(image.pixel(p.x(),p.y()));
+    if (posColor == Qt::white){
+         return true;
+    }
+    return false;
+}
 void Ellips::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
         pen->setCapStyle(Qt::RoundCap);
         painter->setPen(*pen);
@@ -60,11 +86,8 @@ void Ellips::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     }
     if(isActive){
         QPointF p = prevPoints - event->scenePos();
-        if(cursorPosition == 1){
-            m_x -= p.x();
-            m_y -= p.y();
-        }
-        else if(cursorPosition == 2){
+
+        if(cursorPosition == 2){
             m_w -= p.x();
             m_h -= p.y();
         }
@@ -97,6 +120,10 @@ void Ellips::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
         }
         else if(cursorPosition == 9){
             m_w -= p.x();
+        }
+        else{
+            m_x -= p.x();
+            m_y -= p.y();
         }
         QGraphicsItem::prepareGeometryChange();
         prevPoints = event->scenePos();

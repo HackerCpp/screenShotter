@@ -3,12 +3,11 @@
 #include <QFile>
 #include <QTextCodec>
 
-TabRegistration::TabRegistration(QWidget *parent) : QWidget(parent){
+TabRegistration::TabRegistration(){
     m_server= new CommunicationWithServer();
     this->setFixedSize(400,400);
     widgAuthorSocSet = new QWidget();
     mainGroupBox = new QGroupBox;
-    mainVBoxLayout = new QVBoxLayout;
     groupBoxLayout = new QVBoxLayout;
     entryEmailLabel = new QLabel("Для начала работы введите e-mail");
     registrationLabel = new QLabel("Регистрация");
@@ -53,7 +52,6 @@ TabRegistration::TabRegistration(QWidget *parent) : QWidget(parent){
     groupBoxLayout->addWidget(registrationBtn);
     groupBoxLayout->addWidget(autorizationBtn);
     groupBoxLayout->addWidget(continueBtn);
-    this->setLayout(mainVBoxLayout);
     mainVBoxLayout->addWidget(mainGroupBox);
     mainVBoxLayout->addStretch(100);
     mainVBoxLayout->addWidget(widgAuthorSocSet);

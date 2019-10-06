@@ -13,7 +13,7 @@ class Sepia : public Figure {
     void transformation(QGraphicsSceneMouseEvent *event);
 public:
     Sepia(int x,int y,int width, int height,QPen pen,QPixmap pixmap,bool sepia);
-
+    bool setCursorP(QPointF pos);
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
