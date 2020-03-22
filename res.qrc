@@ -1,0 +1,44 @@
+<RCC>
+    <qresource prefix="/res">
+        <file>pict/sep.png</file>
+        <file>pict/brush.png</file>
+        <file>pict/ell.png</file>
+        <file>pict/line.png</file>
+        <file>pict/num.png</file>
+        <file>pict/pen.png</file>
+        <file>pict/rect.png</file>
+        <file>pict/arrow.png</file>
+        <file>pict/cit.png</file>
+        <file>pict/text.png</file>
+        <file>pict/arr.png</file>
+        <file>css/style.css</file>
+        <file>pict/how.png</file>
+        <file>pict/color.png</file>
+        <file>pict/ok.png</file>
+        <file>pict/remove_n.png</file>
+        <file>pict/remove_y.png</file>
+        <file>pict/insert_n.png</file>
+        <file>pict/insert_y.png</file>
+        <file>pict/close.png</file>
+        <file>pict/close_hover.png</file>
+        <file>pict/close_clk.png</file>
+        <file>cursors/Alternate.cur</file>
+        <file>cursors/Busy.ani</file>
+        <file>cursors/Denial_Pack.jpg</file>
+        <file>cursors/DiagonalResize1.cur</file>
+        <file>cursors/DiagonalResize2.cur</file>
+        <file>cursors/Handwrite.cur</file>
+        <file>cursors/Help.cur</file>
+        <file>cursors/HorizontalResize.cur</file>
+        <file>cursors/Link.cur</file>
+        <file>cursors/Move.cur</file>
+        <file>cursors/Normal.cur</file>
+        <file>cursors/Precision.cur</file>
+        <file>cursors/Text.cur</file>
+        <file>cursors/Unavailable.cur</file>
+        <file>cursors/VerticalResize.cur</file>
+        <file>cursors/Working.ani</file>
+        <file>pict/0.png</file>
+        <file>pict/100.png</file>
+    </qresource>
+</RCC>

@@ -1,7 +1,7 @@
 #ifndef Arrow_H
 #define Arrow_H
 #include <QGraphicsItem>
-#include "inc\figure\figure.h"
+#include "inc/figure/figure.h"
 #include <QColor>
 
 class Arrow : public Figure {
@@ -10,20 +10,25 @@ class Arrow : public Figure {
     QVector<QPoint> *m_points;
     QVector<QPoint> *m_pointsBegin;
     int widthmin,widthmax,heightmin,heightmax;
-    int length;
+    qreal length;
+
     void transformation(QGraphicsSceneMouseEvent *event);
     void transformationTwo(QGraphicsSceneMouseEvent *event);
+    void updateP();
+    void transform();
 public:
+    void setWidthLine(int width)override;
+    int getWidth()override;
     Arrow(int x,int y,int width, int height,QPen pen);
-    bool isPointColor(QPoint p);
+    bool isPointColor(QPoint p)override;
 protected:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*);
-    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*)override;
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event)override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event)override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event)override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event)override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event)override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)override;
 };
 
 #endif // Arrow_H

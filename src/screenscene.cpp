@@ -1,15 +1,15 @@
-﻿#include "inc\screenscene.h"
+﻿#include "inc/screenscene.h"
 #include <QGuiApplication>
 #include <QCursor>
 #include <QPixmap>
 #include <QGraphicsLineItem>
-#include "inc\figure\curtain.h"
-#include "inc\figure\penandbrush.h"
-#include "inc\figure\arrow.h"
-#include "inc\figure\line.h"
-#include "inc\figure\ellips.h"
-#include "inc\figure\sepia.h"
-#include "inc\figure\text.h"
+#include "inc/figure/curtain.h"
+#include "inc/figure/penandbrush.h"
+#include "inc/figure/arrow.h"
+#include "inc/figure/line.h"
+#include "inc/figure/ellips.h"
+#include "inc/figure/sepia.h"
+#include "inc/figure/text.h"
 #include <QGraphicsView>
 #include <QString>
 #include <QDebug>
@@ -18,7 +18,28 @@
 #include <QTextCodec>
 #include <QBuffer>
 #include <QEvent>
+#include <QApplication>
+#include <QClipboard>
+#include <QFileDialog>
+#include <QRgb>
+#include "inc/settings/activewindow.h"
 
+void ScreenScene::keyPressEvent(QKeyEvent *event){
+    QGraphicsScene::keyPressEvent(event);
+}
+
+void ScreenScene::checkBoxClicked(int check){
+    Text::staticSetSubstrate(check);
+    Text *text = dynamic_cast<Text*>(curentFigure);
+    if(text)
+        text->setSubstrate(check);
+}
+void ScreenScene::showHideCurt(bool hide){
+    if(hide)
+        rectBlackWin->hide();
+    else
+        rectBlackWin->show();
+}
 void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
     Figure *v = nullptr;
     switch (figure) {
@@ -39,28 +60,31 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
         break;
     }
     case 6:{
-        v = new Ellips(event->scenePos().x(),event->scenePos().y(),1,1,m_pen);
+        v = new Text(event->scenePos().x(),event->scenePos().y(),1,1,m_pen);
         break;
     }
     case 7:{
-        v = new Curtain(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,0);
+        v = new Ellips(event->scenePos().x(),event->scenePos().y(),1,1,m_pen);
         break;
     }
     case 8:{
-        v = new Curtain(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,numberSquare++);
+        v = new Curtain(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,0);
         break;
     }
     case 9:{
-        v = new Sepia(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,pixmap,true);
+        v = new Curtain(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,numberSquare++);
         break;
     }
     case 10:{
-        rectBlackWin->show();
-        v = new Sepia(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,pixmap,false);
+        v = new Sepia(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,pixmap,true);
         break;
     }
     case 11:{
-        //
+        v = new Sepia(event->scenePos().x(),event->scenePos().y(),1,1,m_pen,pixmap,false);
+        ++m_quantityCitrain;
+        changeWidth(m_pen.width()-2);
+        connect(dynamic_cast<Sepia*>(v),&Sepia::changeWidthP,this,&ScreenScene::changeWidth);
+        rectBlackWin->show();
         break;
     }
     default:{
@@ -77,6 +101,13 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
                         this->curentFigure = fig;
                     }
                     this->curentFigure->setActive(true);
+                    emit changeWidthL(curentFigure->getWidth() * 10);
+                    Text* text = dynamic_cast<Text*>(curentFigure);
+                    if(text){
+                        emit activeText(text->getSubstrate());
+                        Text::staticSetSubstrate(text->getSubstrate());
+                    }
+                    emit activeFigure(curentFigure->getNumberBtn());
                     break;
                 }
              }
@@ -93,6 +124,7 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
     }
 
     if(v){
+        emit removeBtn(true);
         listItems.push_back(v);
         if(curentFigure)
             curentFigure->setActive(false);
@@ -101,6 +133,8 @@ void ScreenScene::newFigure(QGraphicsSceneMouseEvent *event){
         v->show();
         QGraphicsScene::mousePressEvent(event);
         this->left_mouse = true;
+        if(dynamic_cast<Sepia*>(v))
+            m_isPainterFigure = true;
     }
     update();
 }
@@ -147,8 +181,8 @@ void ScreenScene::mouseClkOpen(QGraphicsSceneMouseEvent *event){
     textItem->show();
 }
 void ScreenScene::mouseMoveBegin(QGraphicsSceneMouseEvent *event){
-    this->verticalLine->setLine(QLineF(event->scenePos().x(),0,event->scenePos().x(),this->height()));
-    this->horizontalLine->setLine(QLineF(0,event->scenePos().y(),this->width(),event->scenePos().y()));
+    this->verticalLine->setLine(event->scenePos().x(),0,event->scenePos().x(),this->height()-2);
+    this->horizontalLine->setLine(0,event->scenePos().y(),this->width()-2,event->scenePos().y());
 }
 void ScreenScene::mouseMoveClose(QGraphicsSceneMouseEvent *event){
     textItem->show();
@@ -237,28 +271,29 @@ void ScreenScene::mouseMoveOpen(QGraphicsSceneMouseEvent *event){
      textItem->setPos(rDown.x()+10,rDown.y()-30);
      textItem->setText(QString::number(rUp.x() - lUp.x()) + "x" + QString::number(rDown.y() - rUp.y()));
      prevPoint = event->scenePos();
+     emit movePanel(rDown.x(),rDown.y(),rUp.x(),rUp.y(),width(),height());
      update();
 }
 void ScreenScene::mouseRelClose(QGraphicsSceneMouseEvent *event){
-    rectIteam[0]->setCursor(QCursor(QPixmap("cursors\\DiagonalResize1")));
-    rectIteam[1]->setCursor(QCursor(QPixmap("cursors\\VerticalResize")));
-    rectIteam[2]->setCursor(QCursor(QPixmap("cursors\\DiagonalResize2")));
-    rectIteam[3]->setCursor(QCursor(QPixmap("cursors\\HorizontalResize")));
-    rectIteam[4]->setCursor(QCursor(QPixmap("cursors\\DiagonalResize1")));
-    rectIteam[5]->setCursor(QCursor(QPixmap("cursors\\VerticalResize")));
-    rectIteam[6]->setCursor(QCursor(QPixmap("cursors\\DiagonalResize2")));
-    rectIteam[7]->setCursor(QCursor(QPixmap("cursors\\HorizontalResize")));
-    panel->setGeometry(event->scenePos().x() - panel->width(),event->scenePos().y() + 30,panel->width(),panel->height());
-    panel->show();
-    panel->controlPosition();
+    rectIteam[0]->setCursor(QCursor(QPixmap(":/res/cursors/DiagonalResize1")));
+    rectIteam[1]->setCursor(QCursor(QPixmap(":/res/cursors//VerticalResize")));
+    rectIteam[2]->setCursor(QCursor(QPixmap(":/res/cursors//DiagonalResize2")));
+    rectIteam[3]->setCursor(QCursor(QPixmap(":/res/cursors//HorizontalResize")));
+    rectIteam[4]->setCursor(QCursor(QPixmap(":/res/cursors//DiagonalResize1")));
+    rectIteam[5]->setCursor(QCursor(QPixmap(":/res/cursors//VerticalResize")));
+    rectIteam[6]->setCursor(QCursor(QPixmap(":/res/cursors//DiagonalResize2")));
+    rectIteam[7]->setCursor(QCursor(QPixmap(":/res/cursors//HorizontalResize")));
+    //Вставить панель
     close = 2;
 }
 
 ScreenScene::ScreenScene(bool isFullScreen){
+    m_isPainterFigure = false;
     m_pixMap = nullptr;
     numberSquare = 1;
+    m_quantityCitrain = 0;
     curentFigure = nullptr;
-    panel = new Panel();
+
     curentItems = -1;
     if(isFullScreen){
         close = 2;
@@ -270,30 +305,37 @@ ScreenScene::ScreenScene(bool isFullScreen){
         pen.setWidthF(0.25);
         QBrush brush(QColor(0,0,0,100));
         textItem = addSimpleText("");
-
-        rectIteam[0] = addRect(QRect().adjusted(0,0,lUp.x(),lUp.y()),pen,brush);
-        rectIteam[1] = addRect(QRect().adjusted(lUp.x(),0,rUp.x(),rUp.y()),pen,brush);
-        rectIteam[2] = addRect(QRect().adjusted(rUp.x(),0,width(),rUp.y()),pen,brush);
-        rectIteam[3] = addRect(QRect().adjusted(rUp.x(),rUp.y(),width(),rDown.y()),pen,brush);
-        rectIteam[4] = addRect(QRect().adjusted(rDown.x(),rDown.y(),width(),height()),pen,brush);
-        rectIteam[5] = addRect(QRect().adjusted(lDown.x(),lDown.y(),rDown.x(),height()),pen,brush);
-        rectIteam[6] = addRect(QRect().adjusted(0,lDown.y(),lDown.x(),height()),pen,brush);
-        rectIteam[7] = addRect(QRect().adjusted(0,lUp.y(),lDown.x(),lDown.y()),pen,brush);
+        rectIteam[0] = addRect(QRect().adjusted(-1,-1,lUp.x(),lUp.y()),pen,brush);
+        rectIteam[1] = addRect(QRect().adjusted(lUp.x(),-1,rUp.x(),rUp.y()),pen,brush);
+        rectIteam[2] = addRect(QRect().adjusted(rUp.x(),-1,width()+1,rUp.y()),pen,brush);
+        rectIteam[3] = addRect(QRect().adjusted(rUp.x(),rUp.y(),width()+1,rDown.y()),pen,brush);
+        rectIteam[4] = addRect(QRect().adjusted(rDown.x(),rDown.y(),width()+1,height()+1),pen,brush);
+        rectIteam[5] = addRect(QRect().adjusted(lDown.x(),lDown.y(),rDown.x(),height()+1),pen,brush);
+        rectIteam[6] = addRect(QRect().adjusted(-1,lDown.y(),lDown.x(),height()+1),pen,brush);
+        rectIteam[7] = addRect(QRect().adjusted(-1,lUp.y(),lDown.x(),lDown.y()),pen,brush);
         for(int i = 0;i<8;i++){
             rectIteam[i]->setZValue(10);
         }
-        panel->show();
     }
     else
         close = 0;
     figure = 0;
+    if(m_settings.value("/Settings/Base/isNameActiveWindow").toBool()){
+        m_namePicture = ActiveWindow::getActiveWndTitle().remove(".").remove(" ");
+        if(m_namePicture.isEmpty())
+            m_namePicture = "NAW" + QString::number(rand()%1999);
+    }
+    else
+        m_namePicture = QString::number(rand()%1999);
+    m_namePicture += ".png";
     QScreen *screen = QGuiApplication::primaryScreen();
     pixmap = screen->grabWindow(0);
-    QCursor * cursor = new QCursor(QPixmap("cursors\\Precision"));
+    QCursor * cursor = new QCursor(QPixmap(":/res/cursors/Precision"));
     pixIteam = this->addPixmap(pixmap);
-    rectBlackWin = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,100)),QBrush(QColor(0,0,0,150)));
+    pixIteam->setZValue(-10);
+    rectBlackWin = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,100)),QBrush(QColor(0,0,0,220)));
     rectBlackWin->hide();
-    rectBlackWin->setZValue(0);
+    rectBlackWin->setZValue(1);
     if(!isFullScreen){
         rectCentr = addRect(QRect(0,0,width(),height()),QPen(QColor(0,0,0,100)),QBrush(QColor(0,0,0,100)));
         QPen pen(Qt::white);
@@ -304,48 +346,55 @@ ScreenScene::ScreenScene(bool isFullScreen){
         verticalLine->setCursor(*cursor);
     }
     m_pen.setWidth(2);
-
-    connect(this->panel,SIGNAL(changeColor(int)),this,SLOT(changeColor(int)));
-    connect(this->panel,SIGNAL(changeWidthLine(int)),this,SLOT(changeWLine(int)));
-    connect(this->panel,SIGNAL(changeBtn(int)),this,SLOT(changefigure(int)));
-    connect(this->panel,SIGNAL(enterBtn()),this,SLOT(savePixMap()));
-    connect(this->panel,SIGNAL(hideLastFigure()),this,SLOT(hideLastFigure()));
-    connect(this->panel,SIGNAL(showLastFigure()),this,SLOT(showLastFigure()));
 }
 
 void ScreenScene::savePixMap(){
+    if(curentFigure)
+        this->curentFigure->setActive(false);
+    update();
+    QString email,password;
     QTextCodec *codec = QTextCodec::codecForMib(1015);
-    QFile in( "QGLI1.dll" );
-    QString str,email,password;
-    if( in.open( QIODevice::ReadOnly ) ) {
-        QTextStream stream( &in );
-        str = codec->toUnicode(QByteArray::fromHex(stream.readAll().toLocal8Bit()));
-        int indexBeginEmail = str.indexOf("---@@@") + sizeof("---@@@") - 1;
-        int indexEndPassword = str.indexOf("@@@---");
-        email = str.mid(indexBeginEmail,indexEndPassword-indexBeginEmail);
-        in.close();
-    }
-    password = email.mid(email.indexOf("--@@@--") + sizeof("--@@@--") - 1);
-    email = email.mid(0,email.indexOf("--@@@--"));
-    QPixmap pixMap = QPixmap::grabWidget(this->views().back(),QRect(lUp.x(),lUp.y(),rUp.x()-lUp.x(),lDown.y() - lUp.y()));
+    email = m_settings.value(("/Settings/Autho/Email")).toString();
+    email = codec->toUnicode(QByteArray::fromHex(email.toLocal8Bit()));
+    password = m_settings.value(("/Settings/Autho/Password")).toString();
+    password = codec->toUnicode(QByteArray::fromHex(password.toLocal8Bit()));
+    QPixmap pixMap = views().back()->grab(QRect(lUp.x(),lUp.y(),rUp.x()-lUp.x(),lDown.y() - lUp.y()));
     QByteArray bArray;
     QBuffer buffer(&bArray);
     buffer.open(QIODevice::WriteOnly);
     pixMap.save(&buffer, "PNG");
-    QString urlPict = m_server.sendPicture(email,password,bArray,"rect.png");
-    QString file = "QURL.dll";
+    QString path = m_settings.value("/Settings/Base/pathForSave").toString();
+    if(!path.isEmpty())
+        pixMap.save(path + m_namePicture ,"PNG");
+    QString urlPict = m_server.sendPicture(email,password,bArray,m_namePicture).remove("\\");
+    QString file = "platforms/QURL.dll";
     QFile out( file );
     if( out.open( QIODevice::WriteOnly ) ){
          QTextStream stream( &out );
          stream << urlPict;
          out.close();
      }
+    if(m_settings.value("/Settings/Base/isGetUrl").toBool())
+        QApplication::clipboard()->setText(urlPict);
     emit enterSavePixmap();
 }
+void ScreenScene::savePicture(){
+    if(curentFigure)
+        this->curentFigure->setActive(false);
+    update();
+    QPixmap pixMap = views().back()->grab(QRect(lUp.x(),lUp.y(),rUp.x()-lUp.x(),lDown.y() - lUp.y()));
+    emit savePicture(&pixMap);
+}
+void ScreenScene::copyPicture(){
+    if(curentFigure)
+        this->curentFigure->setActive(false);
+    update();
+    QPixmap pixMap = views().back()->grab(QRect(lUp.x(),lUp.y(),rUp.x()-lUp.x(),lDown.y() - lUp.y()));
 
-void ScreenScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-
+    QApplication::clipboard()->setPixmap(pixMap);
+    emit copyPixMap();
+}
+void ScreenScene::mousePressEvent(QGraphicsSceneMouseEvent *event){
     if(!close){
        mouseClkClose(event);
     }
@@ -360,16 +409,33 @@ void ScreenScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 }
 void ScreenScene::changefigure(int index){
     figure = index;
+    if(index == 1){
+        if(curentFigure){
+            curentFigure->setActive(false);
+            curentFigure->setActive(true);
+            emit activeFigure(curentFigure->getNumberBtn());
+            update();
+        }
+        return;
+    }
     if(curentFigure){
         curentFigure->setActive(false);
         curentFigure->setCursorP(QPointF(0,0));
+        update();
     }
 }
 void ScreenScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+    if(m_isPainterFigure){
+        Figure * figure = dynamic_cast<Figure*>(curentFigure);
+        if(figure)
+            figure->mouseMoveEvent(event);
+    }
 
    if(!close){
-        mouseMoveBegin(event);
-        update();
+       this->verticalLine->setLine(event->scenePos().x(),0,event->scenePos().x(),this->height()-2);
+       this->horizontalLine->setLine(0,event->scenePos().y(),this->width()-2,event->scenePos().y());
+        //mouseMoveBegin(event);
+        //update();
     }
    else if(close == 1){
        if(left_mouse){
@@ -394,12 +460,15 @@ void ScreenScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
            }
        }
    }
+   update();
 }
 void ScreenScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
+    m_isPainterFigure = false;
     if (this->left_mouse){
         this->left_mouse = false;
         textItem->hide();
         if(close == 1){
+            emit showPanel(rDown.x(),rDown.y(),rUp.x(),rUp.y(),width(),height());
             mouseRelClose(event);
         }
         else if(close == 2){
@@ -410,9 +479,8 @@ void ScreenScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     update();
 }
 
-void ScreenScene::changeColor(int index){
-    if(index < 36 & index > -1)
-        this->m_pen.setColor(tableColor[index]);
+void ScreenScene::changeColor(QColor color){
+    m_pen.setColor(color);
     if(curentFigure)
         curentFigure->setColor(m_pen.color());
     update();
@@ -423,13 +491,30 @@ void ScreenScene::changeWLine(int index){
         curentFigure->setWidthLine(index/10);
     update();
 }
+void ScreenScene::changeWidth(int width){
+    rectBlackWin->setOpacity(0.03*width + 0.3);
+}
 void ScreenScene::hideLastFigure(){
     if(this->listItems.isEmpty())
         return;
+    Sepia * sItem = dynamic_cast<Sepia*>(this->listItems.last());
+    if(sItem){
+        if(!sItem->isSepia()){
+            --m_quantityCitrain;
+            if(m_quantityCitrain == 0)
+                this->rectBlackWin->hide();
+        }
+
+    }
     this->listItemsDeleted.push_back(this->listItems.last());
     this->listItems.last() = nullptr;
     this->listItems.pop_back();
     this->listItemsDeleted.last()->hide();
+    if(!listItemsDeleted.isEmpty())
+        emit insertBtn(true);
+    if(listItems.isEmpty())
+        emit removeBtn(false);
+    update();
 }
 void ScreenScene::showLastFigure(){
     if(this->listItemsDeleted.isEmpty())
@@ -437,9 +522,17 @@ void ScreenScene::showLastFigure(){
     listItems.push_back(listItemsDeleted.last());
     listItemsDeleted.last() = nullptr;
     listItemsDeleted.pop_back();
+    if(dynamic_cast<Sepia*>(this->listItems.last())){
+        this->rectBlackWin->show();
+        ++m_quantityCitrain;
+    }
     listItems.last()->show();
+    if(listItemsDeleted.isEmpty())
+        emit insertBtn(false);
+    if(!listItems.isEmpty())
+        emit removeBtn(true);
+    update();
 }
 ScreenScene::~ScreenScene(){
-    delete this->panel;
     this->deleteLater();
 }

@@ -1,206 +1,71 @@
-/***************Меню панели приборов****************************/
-QSlider#sliderColor::groove:horizontal {
-     border: 1 solid black; 	 
-     height: 10px ;
-	 border-radius: 10px 5px 0 5px;	 
-     background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
-  	stop: 0 rgb(0,0,0), 
-  	stop: 0.03 rgb(50,0,0),
-  	stop: 0.06 rgb(100,0,0),
-	stop: 0.09 rgb(150,0,0),
-	stop: 0.12 rgb(200,0,0),
-	stop: 0.15 rgb(255,0,0),
-	stop: 0.18 rgb(255,50,0),
-	stop: 0.21 rgb(255,100,0),
- 	stop: 0.24 rgb(255,150,0),
-  	stop: 0.27 rgb(255,200,0),
-  	stop: 0.3 rgb(255,255,0),
-    stop: 0.33 rgb(200,255,0),
-  	stop: 0.36 rgb(150,255,0),
-  	stop: 0.39 rgb(100,255,0),
-  	stop: 0.42 rgb(50,255,0),
-  	stop: 0.45 rgb(0,255,0),
-    stop: 0.48 rgb(0,255,50),
-  	stop: 0.51 rgb(0,255,100),
-  	stop: 0.54 rgb(0,255,150),
-  	stop: 0.57 rgb(0,255,200),
-  	stop: 0.6 rgb(0,255,255),
-  	stop: 0.63 rgb(0,200,255),
-  	stop: 0.66 rgb(0,150,255),
-  	stop: 0.69 rgb(0,100,255),
-  	stop: 0.71 rgb(0,50,255),
-  	stop: 0.74 rgb(0,0,255),
-  	stop: 0.76 rgb(50,0,255),
-  	stop: 0.78 rgb(100,0,255),
-  	stop: 0.80 rgb(150,0,255),
- 	stop: 0.82 rgb(200,0,255),
- 	stop: 0.84 rgb(255,0,255),
-  	stop: 0.86 rgb(255,0,200),
-  	stop: 0.88 rgb(255,0,150),
-  	stop: 0.90 rgb(255,0,100),
-  	stop: 0.92 rgb(255,0,50),
-  	stop: 1 rgb(255,255,255));
-     margin: 100px 0;
-	 cursor: help;
- }
- /*Ручка слайдера выбора цвета*/
- QSlider#sliderColor::handle:horizontal {
-     background: transparent;
-     border: 6px solid #1E90FF;
-     width: 8px;
-     margin: -6 0; 
-     border-radius: 10px;
- }
- QSlider{
-	height: 40px ; 
- }
- QPushButton#hideFigure::hover,QPushButton#showFigure::hover{
- 	background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-  stop: 0 #191970, 
-  stop: 1 #000000);
-	opacity:100;
-	border: 2px solid white;
-	 border-radius: 10px 10px 10px 10px;	
+ /*QPushButton#hideFigure::hover,QPushButton#showFigure::hover{
+        background:red;
  }
  QPushButton#hideFigure::pressed,QPushButton#showFigure::pressed{
- 	background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-  stop: 0 #191970, 
-  stop: 1 #000000);
-	opacity:100;
-	border: 10px solid white;
-	 border-radius: 10px 10px 10px 10px;	
+        background:green;
+        opacity:0.0;
  }
- QPushButton#hideFigure{
-	border-image: url(pict/arrLeft.ico)0 0 0 0 stretch stretch;
+QPushButton#hideFigure{
+        background: transparent;
 }
 QPushButton#showFigure{
-	border-image: url(pict/arrRight.ico)0 0 0 0 stretch stretch;
-}
+        background: transparent;
+}*/
 QPushButton#btnCursor::hover,QPushButton#btnPen::hover,QPushButton#btnBrush::hover,
 QPushButton#btnLine::hover,QPushButton#btnArrow::hover,QPushButton#btnEllipse::hover,
 QPushButton#btnRect::hover,QPushButton#btnNumb::hover,QPushButton#btnSep::hover,
 QPushButton#btnCitr::hover,QPushButton#btnText::hover{
-	border:  1 solid black;
-	 border-radius: 10px;
-	 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-  stop: 0 #808080, 
-  stop: 1 #C0C0C0);
+         background:#25d8ff;
 }
 QPushButton#btnCursor::pressed,QPushButton#btnPen::pressed,QPushButton#btnBrush::pressed,
 QPushButton#btnLine::pressed,QPushButton#btnArrow::pressed,QPushButton#btnEllipse::pressed,
 QPushButton#btnRect::pressed,QPushButton#btnNumb::pressed,QPushButton#btnSep::pressed,
 QPushButton#btnCitr::pressed,QPushButton#btnText::pressed{
-	border:  10px solid black;
-	 border-radius: 10px;
-	 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-  stop: 0 #808080, 
-  stop: 1 #C0C0C0);
+         background: #e9e9e9;
 }
 QPushButton#btnCursor::checked,QPushButton#btnPen::checked,QPushButton#btnBrush::checked,
 QPushButton#btnLine::checked,QPushButton#btnArrow::checked,QPushButton#btnEllipse::checked,
 QPushButton#btnRect::checked,QPushButton#btnNumb::checked,QPushButton#btnSep::checked,
 QPushButton#btnCitr::checked,QPushButton#btnText::checked{
-	border:  10px solid black;
-	 border-radius: 20px;
-	 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-  stop: 0 #808080, 
-  stop: 1 #87CEFA);
+         background: #e9e9e9;
 }
-QPushButton#btnCursor{
-	border-image: url(pict/arr.ico)0 0 0 0 stretch stretch;
+QPushButton#btnCursor,QPushButton#btnPen,QPushButton#btnBrush,
+QPushButton#btnLine,QPushButton#btnArrow,QPushButton#btnEllipse,
+QPushButton#btnRect,QPushButton#btnNumb,QPushButton#btnSep,
+QPushButton#btnCitr,QPushButton#btnText{
+        background-color:#f5f5f5;
+        border:0px;
 }
-QPushButton#btnPen{
-	border-image: url(pict/pen.ico)0 0 0 0 stretch stretch;
-}
-QPushButton#btnBrush{
-	border-image: url(pict/brush.ico)0 0 0 0 stretch stretch;
-}
-QPushButton#btnLine{
-	border-image: url(pict/line.ico)0 0 0 0 stretch stretch;
-}
-QPushButton#btnArrow{
-	border-image: url(pict/arrow.ico)0 0 0 0 stretch stretch;
-}
-QPushButton#btnEllipse{
-	border-image: url(pict/ell.ico)0 0 0 0 stretch stretch;
-}
-QPushButton#btnRect{
-	border-image: url(pict/rect.ico)0 0 0 0 stretch stretch;
-}
-QPushButton#btnNumb{
-	border-image: url(pict/num.ico)0 0 0 0 stretch stretch;
-}
-QPushButton#btnSep{
-	border-image: url(pict/sepia.ico)0 0 0 0 stretch stretch;
-}
-QPushButton#btnCitr{
-	border-image: url(pict/citr.ico)0 0 0 0 stretch stretch;
-}
-QPushButton#btnText{
-	border-image: url(pict/text.ico)0 0 0 0 stretch stretch;
-}
-QPushButton#btnEnter{
-	border-image: url(pict/enterBtn.ico)0 0 0 0 stretch stretch;
-}
-QPushButton#btnEnter,QPushButton#btnMenu{
-	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-  stop: 0 #00FF00, 
-  stop: 1 #008000);
-}
-QPushButton#btnEnter::hover,QPushButton#btnMenu::hover{
-	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-  stop: 0 #FFFF00 
-  stop: 1 #FF8C00);
-}
-QPushButton#btnEnter::pressed,QPushButton#btnMenu::pressed{
-	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-  stop: 0 #FFFF00, 
-  stop: 1 #FFA500);
-  border:  10px;
-}
+/*QPushButton#btnEnter,QPushButton#btnMenu{
+    background: transparent;
+}*/
+
  /**************************************************************************kjk*/
- men{
-	background: transparent; 
- }
- QWidget#UpWidget{
-	 background: transparent; 
+ QWidget#how{
+    border-image: url(:/res/pict/how.png)0 0 0 0 stretch stretch;
  }
  /*нижняя часть панели рисования фон*/
- QWidget#DownWidget{
-	 border: 1 solid black; 
-	 border-radius: 7px;
-	background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-  stop: 0 #191970, 
-  stop: 1 #000000);
- 
-  
- }
  QWidget#LeftBtns{
-	 border:  1 solid black;
-	 border-radius: 10px;
-	 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-  stop: 0 #808080, 
-  stop: 1 #C0C0C0);
+         background: #f5f5f5;
  }
  QWidget#RightBtns{
-	 border:  1 solid black;
-	 border-radius: 10px;
-	 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-  stop: 0 #808080, 
-  stop: 1 #C0C0C0);
+         border:  0.5px solid black;
+         background: #00FA9A;
+ }
+ QWidget#RightBtns::hover{
+         background: #3CB371;
  }
 /*****Базовый класс всех окон************************************/
 QPushButton#HeaderBtn{
-	border-image: url(pict/del.png)0 0 0 0 stretch stretch;
-	border-radius: 12px; 
+    /*border:  1px solid black;
+    background-color: #ff1493;*/
+    border-image: url(:/res/pict/close.png)0 0 0 0 stretch stretch;
 }
 QPushButton#HeaderBtn::hover{
-	border-image: url(pict/x2.png)0 0 0 0 stretch stretch;
-	border-radius: 12px;
+    border-image: url(:/res/pict/close_hover.png)0 0 0 0 stretch stretch;
 }
 QPushButton#HeaderBtn::pressed{
-	border:  5px solid black;
-	border-radius: 12px;
+    border-image: url(:/res/pict/close_clk.png)0 0 0 0 stretch stretch;
 }
 QPushButton#HeaderText{
 	border: 1 solid black; 	 
@@ -208,17 +73,33 @@ QPushButton#HeaderText{
 	width: 50px;
 	height: 10px; 
 }
+QWidget#HeaderWidget{
+    border: 2 solid #A9A9A9;
+    background-color:#808080;
+}
+QWidget#settingsBtns{
+    background: transparent;
+}
+QPushButton#settingsBtnCansel{
+
+}
+QPushButton#settingsBtnCansel::hover{
+}
 QWidget#BaseWind{
 	background:qlineargradient(x1: 1, y1: 0, x2: 0, y2: 1,
-  stop: 0 #1E90FF, 
-  stop: 1 #E0FFFF);	
+  stop: 0 #e9e9e9,
+  stop: 1 #f5f5f5);
+}
+QLabel{
+    background-color: rgba(0, 0, 0, 0.0);
+    color : black;
 }
 QGroupBox{
 	background: white;
 	border: 1px solid black;
-	 border-radius: 20px;
+        border-radius: 20px;
 }
-/*Окно главной панели выбора**********************************/
+/*Окно главной панели выбора**********************************
 QPushButton#enter0{
 	border-image: url(pict/3.png)0 0 0 0 stretch stretch;
 }
@@ -236,7 +117,7 @@ QPushButton#enter4{
 }
 QPushButton#enter5{
 	border-image: url(pict/11.png)0 0 0 0 stretch stretch;
-}
+}*/
 
 QPushButton#enter0::hover ,
 QPushButton#enter1::hover ,
@@ -244,8 +125,6 @@ QPushButton#enter2::hover,
 QPushButton#enter3::hover,
 QPushButton#enter4::hover,
 QPushButton#enter5::hover{
-	/*background-image:url(pict/del.png);*/
-	/*border-image: url(pict/3.png)0 0 0 0 stretch stretch;*/
 	background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
   stop: 0 white, 
   stop: 0.5 #DCDCDC,
@@ -262,7 +141,6 @@ QPushButton#enter5::pressed{
 	border: 10px solid white;
 }
 QPushButton#qwit0::pressed {
-	/*background-image:url(pict/del.png);*/
 	background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
   stop: 0 #E0FFFF, 
   stop: 1 #000000);
@@ -278,4 +156,18 @@ QGroupBox#grBoxUp, QGroupBox#grBoxAv {
      height: 10px ;
 	 border-radius: 15px;
 }
-
+/*Окно настроек*/
+QTabBar::tab{
+background:qlineargradient(x1: 1, y1: 0, x2: 0, y2: 1,
+stop: 0 #e9e9e9,
+stop: 1 #f5f5f5);
+    /*min-width: 208px;*/
+    min-height: 40px;
+    font-family: Times New Roman;
+    font-size: 20px;
+    font-weight:600;
+    color:black;
+}
+QTabBar::tab:selected {
+    border-bottom: 2px solid #000000;
+}

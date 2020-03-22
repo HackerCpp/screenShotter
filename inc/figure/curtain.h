@@ -1,7 +1,7 @@
 #ifndef CURTAIN_H
 #define CURTAIN_H
 #include <QGraphicsItem>
-#include "inc\figure\figure.h"
+#include "inc/figure/figure.h"
 #include <QColor>
 
 class Curtain : public Figure {

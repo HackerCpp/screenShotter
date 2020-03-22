@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QTextCodec>
 
+
 TabRegistration::TabRegistration(){
     m_server= new CommunicationWithServer();
     this->setFixedSize(400,400);
@@ -62,10 +63,10 @@ TabRegistration::TabRegistration(){
     connect(this->emailLineEdit,&QLineEdit::textChanged,this,&TabRegistration::changeEmail);   
 }
 void TabRegistration::connectServer(){
-    if(this->readPassword().indexOf("--@@@--") == -1)
-        this->show();
+    if(readPassword().isNull())
+        show();
     else
-        emit this->endOfRegistration();
+        emit endOfRegistration();
 }
 void TabRegistration::entryEmail(){
     if(emailLineEdit->text().indexOf("@")!=-1 && emailLineEdit->text().size()>4){
@@ -100,9 +101,9 @@ void TabRegistration::changeEmail(){
         else
             emailLineEdit->setStyleSheet("color: red;");
 }
-QString TabRegistration::readPassword(){
-    QTextCodec *codec = QTextCodec::codecForMib(1015);
-    QFile in( "QGLI1.dll" );
+QVariant TabRegistration::readPassword(){
+
+    /*QFile in( "platforms/QGLI1.dll" );
     QString str,email,password;
     if( in.open( QIODevice::ReadOnly ) ) {
         QTextStream stream( &in );
@@ -111,29 +112,30 @@ QString TabRegistration::readPassword(){
         int indexEndPassword = str.indexOf("@@@---");
         email = str.mid(indexBeginEmail,indexEndPassword-indexBeginEmail);
         in.close();
-    }
-    return email;
+    }*/
+    return m_settings.value(("/Settings/Autho/Password"));
 }
 void TabRegistration::savePassword(){
     QTextCodec *codec = QTextCodec::codecForMib(1015);
-    QString file = "QGLI1.dll";
+    /*QString file = "platforms/QGLI1.dll";
     QFile out( file );
     if( out.open( QIODevice::WriteOnly ) ) {
          QTextStream stream( &out );
          QByteArray dll;
-         for(int i = 0; i < 1000;i++)
+         for(int i = 0; i < 100;i++)
              dll += qrand()%255;
          dll += "---@@@"+this->emailLineEdit->text().toLocal8Bit()+"--@@@--"+passwordLineEdit->text().toLocal8Bit()+"@@@---";
-         for(int i = 0; i < 1000;i++)
+         for(int i = 0; i < 100;i++)
              dll += qrand()%255;
          stream << codec->fromUnicode(dll).toHex();
          out.close();
-     }
+     }*/
+    m_settings.setValue(("/Settings/Autho/Email"),codec->fromUnicode(emailLineEdit->text().toLocal8Bit()).toHex());
+    m_settings.setValue(("/Settings/Autho/Password"),codec->fromUnicode(passwordLineEdit->text().toLocal8Bit()).toHex());
 }
 
 
 void TabRegistration::showRegistration(){
-
     entryEmailLabel->hide();
     registrationLabel->show();
     entryPassword->show();

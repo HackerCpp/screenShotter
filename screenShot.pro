@@ -3,14 +3,18 @@
 # Project created by QtCreator 2019-09-07T20:05:11
 #
 #-------------------------------------------------
-
-QT       += core gui network
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+! include( ./globalShortCut_lib/qxt.pri ) {
+    error( "Couldn't find the qxt.pri file!" )
+}
+! include(./updater/QSimpleUpdater.pri) {
+    error( "Couldn't find the qxt.pri file!" )
+}
+QT       += core gui network widgets
+#LIBS+=-Wl,-rpath ./lib
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent
 
 TARGET = screenShot
 TEMPLATE = app
-INCLUDEPATH += $$PWD
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -25,29 +29,50 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        src/main.cpp \
-        src/mainwindow.cpp \
-    src/screenscene.cpp \
-    src/panel.cpp \
+    src/figure/arrow.cpp \
     src/figure/curtain.cpp \
+    src/figure/ellips.cpp \
     src/figure/figure.cpp \
-    src/figure/penandbrush.cpp\
-src/figure/arrow.cpp\
-src/figure/line.cpp\
-src/figure/ellips.cpp\
-src/figure/sepia.cpp\
-src/figure/text.cpp\
+    src/figure/line.cpp \
+    src/figure/penandbrush.cpp \
+    src/figure/sepia.cpp \
+    src/figure/text.cpp \
+    src/panel/baseslider.cpp \
+    src/panel/btn.cpp \
+    src/panel/btninsert.cpp \
+    src/panel/btnMnu.cpp \
+    src/panel/btntooltip.cpp \
+    src/panel/slidercolor.cpp \
+    src/panel/slidersize.cpp \
+    src/settings/activewindow.cpp \
+    src/settings/settingtab.cpp \
+    src/tabs/btnsforurl.cpp \
+    src/tabs/menu.cpp \
+src/tabs/contextmenu.cpp \
+    src/tabs/tabbase.cpp \
+    src/tabs/tabgraphicseditor.cpp \
+    src/tabs/tabregistration.cpp \
+    src/tabs/tabsettings.cpp \
+    src/tabs/tray.cpp \
+    src/tabs/window.cpp \
     src/client.cpp \
     src/communicationwithserver.cpp \
-    src/tabs/tabregistration.cpp \
-    src/tabs/tabgraphicseditor.cpp \
-    src/tabs/window.cpp \
-    src/tabs/tabsettings.cpp \
-    src/tabs/tabbase.cpp
+    src/hookkeybord.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/panel.cpp \
+    src/screenscene.cpp \
+    src/settings/autoplay.cpp \
+    src/settings/hotkeytab.cpp \
+    src/tabs/dialogforenterpathforsavescreenshot.cpp \
+    src/tabs/btnsokandcansel.cpp
 
 HEADERS += \
         inc/mainwindow.h \
+    inc/panel/btninsert.h \
+    inc/settings/settingtab.h \
     inc/screenscene.h \
+inc/hookkeybord.h\
     inc/panel.h \
     inc/figure/curtain.h \
     inc/figure/figure.h \
@@ -63,9 +88,30 @@ inc/figure/text.h\
     inc/tabs/tabgraphicseditor.h \
     inc/tabs/window.h \
     inc/tabs/tabsettings.h \
-    inc/tabs/tabbase.h
+    inc/tabs/tabbase.h \
+    inc/tabs/btnsforurl.h \
+    inc/tabs/tray.h \
+    inc/tabs/contextmenu.h \
+    inc/tabs/menu.h \
+    inc/panel/btn.h \
+inc/panel/btnMnu.h \
+    inc/panel/baseslider.h \
+    inc/panel/slidercolor.h \
+    inc/panel/slidersize.h \
+    inc/panel/btntooltip.h \
+    inc/settings/autoplay.h \
+    inc/settings/hotkeytab.h \
+    inc/tabs/dialogforenterpathforsavescreenshot.h \
+    inc/tabs/btnsokandcansel.h \
+    inc/settings/activewindow.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res.qrc
+
+FORMS += \
+    hotkey.ui

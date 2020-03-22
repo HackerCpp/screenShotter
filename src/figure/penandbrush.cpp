@@ -50,65 +50,82 @@ bool PenAndBrush::isPointColor(QPoint p){
     }
 
     QColor posColor = QColor(image.pixel(p.x(),p.y()));
-    //QColor cleanColor = QColor(imageClen.pixel(p.x(),p.y()));
     if (posColor == Qt::white){
          return true;
     }
     return false;
 }
-void PenAndBrush::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
-        painter->setRenderHint(QPainter::Antialiasing,true);
+void PenAndBrush::run(){
+    QPainter painter(m_doublePixmap);
+    m_doublePixmap->fill(QColor(0,0,0,0));
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing);
+        painter.setRenderHint(QPainter::Antialiasing,true);
         pen->setCosmetic(true);
         pen->setCapStyle(Qt::RoundCap);
         QPointF pointBegin = *m_points.begin();
         if(!m_isPen){
             pen->setColor(QColor(pen->color().red(),pen->color().green(),pen->color().blue(),150));
         };
-        painter->setPen(*pen);
-        painter->setBrush(*brush);
+        painter.setPen(*pen);
+        //painter.setBrush(*brush);
+        //painter.drawPath(m_path);
         QPainterPath path(pointBegin);
         for(auto point = m_points.begin()+1;point < m_points.end();point++){
             path.lineTo(*point);
         }
-        painter->drawPath(path);
+        painter.drawPath(path);
+        /*for(auto point = m_points.begin()+1;point < m_points.end();point++){
+            painter.drawLine(pointBegin,*point);
+            pointBegin = *point;
+        }*/
         if(isActive){
             int x = boundingRect().x();
             int y = boundingRect().y();
             int w = boundingRect().width();
             int h = boundingRect().height();
-          painter->setPen(*penActive);
-          painter->setBrush(*brushActive);
-          painter->drawEllipse(x-5,y-5,10,10);
-          painter->drawEllipse(x+w-5,y-5,10,10);
-          painter->drawEllipse(x-5,y+h-5,10,10);
-          painter->drawEllipse(x+w-5,y+h-5,10,10);
+          painter.setPen(*penActive);
+          painter.setBrush(*brushActive);
+          painter.drawEllipse(x-5,y-5,10,10);
+          painter.drawEllipse(x+w-5,y-5,10,10);
+          painter.drawEllipse(x-5,y+h-5,10,10);
+          painter.drawEllipse(x+w-5,y+h-5,10,10);
 
-          painter->drawEllipse(x+w/2,y-5,10,10);
-          painter->drawEllipse(x+w/2,y+h-5,10,10);
-          painter->drawEllipse(x-5,y+h/2,10,10);
-          painter->drawEllipse(x+w-5,y+h/2,10,10);
-          painter->drawLine(x+w/2-5,y+h/2-5,x+w/2+5,y+h/2+5);
-          painter->drawLine(x+w/2-5,y+h/2+5,x+w/2+5,y+h/2-5);
+          painter.drawEllipse(x+w/2,y-5,10,10);
+          painter.drawEllipse(x+w/2,y+h-5,10,10);
+          painter.drawEllipse(x-5,y+h/2,10,10);
+          painter.drawEllipse(x+w-5,y+h/2,10,10);
+          painter.drawLine(x+w/2-5,y+h/2-5,x+w/2+5,y+h/2+5);
+          painter.drawLine(x+w/2-5,y+h/2+5,x+w/2+5,y+h/2-5);
           //painter->drawRect(boundingRect());
         }
+        swapPixMap();
+}
+void PenAndBrush::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
+    painter->drawImage(QRectF(0,0,2000,2000),*m_curentPixmap,QRectF(0,0,m_curentPixmap->width(),m_curentPixmap->height()));
 }
 
 
 void PenAndBrush::mousePressEvent(QGraphicsSceneMouseEvent *event){
+    wait();
     if(close){
         QGraphicsItem::prepareGeometryChange();
         prevPoints = event->scenePos();
         this->m_points.push_back(event->pos());
+        //m_path.lineTo(event->pos());
         update();
     }
     else{
         cursorPosition = getPoint(event->pos());
         prevPoints = event->scenePos();
     }
+    start();
 }
 void PenAndBrush::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+    wait();
     if(close){
         this->m_points.push_back(event->pos());
+        //m_path.lineTo(event->pos());
         x_max = x_max < event->pos().x()?event->pos().x():x_max;
         x_min = x_min > event->pos().x()?event->pos().x():x_min;
         y_max = y_max < event->pos().y()?event->pos().y():y_max;
@@ -175,6 +192,9 @@ void PenAndBrush::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
             m_translateY -= p.y();
         }
         int i = 0;
+        /*for(auto i = m_path.begin(),i < m_path.end(),i++){
+            qDebug() <<i;
+        }*/
         for(auto pr = m_points.begin() ;pr < m_points.end();pr++ , i++){
             pr->setX(m_pointsBegin.at(i).x() * m_scaleX + m_translateX);
             pr->setY(m_pointsBegin.at(i).y() * m_scaleY + m_translateY);
@@ -186,8 +206,10 @@ void PenAndBrush::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
         prevPoints = event->scenePos();
         update();
     }
+    start();
 }
 void PenAndBrush::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
+    wait();
     if(close){
         close = false;
         for(auto pr = m_points.begin();pr < m_points.end();pr++){
@@ -203,6 +225,7 @@ void PenAndBrush::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     }
     cursorPosition = 0;
     update();
+    start();
 }
 void PenAndBrush::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event){
 

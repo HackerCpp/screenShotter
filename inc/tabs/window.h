@@ -10,21 +10,22 @@
 #include <QSlider>
 #include <QGridLayout>
 #include <QLabel>
-#include <QSystemTrayIcon>
+#include "inc/tabs/tray.h"
 #include <QVector>
 #include "inc/tabs/tabbase.h"
+#include "inc/tabs/btnsforurl.h"
+#include <QMenu>
 
 class Wind : public TabBase{
      Q_OBJECT
-
-
-    QSystemTrayIcon *trayIcon;
+    Tray *trayIcon;
     QGridLayout * gridLayoutUp;
-    QHBoxLayout * hBoxLayoutAver,*hBoxLayoutDown;
-    QGroupBox * groupBoxUp,* groupBoxAver;
+    QHBoxLayout *hBoxLayoutDown;
+    QGroupBox * groupBoxUp;
     QWidget * downWidg;
-    QPushButton * pushBtn[6];
+    QPushButton * pushBtn[4];
     QLabel * labelleft,*labelRight;
+    BtnsForUrl * m_btnForUrl;
     void setObgectName();
 public:
     Wind();

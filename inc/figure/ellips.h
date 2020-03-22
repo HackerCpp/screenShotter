@@ -1,7 +1,7 @@
 #ifndef Ellips_H
 #define Ellips_H
 #include <QGraphicsItem>
-#include "inc\figure\figure.h"
+#include "inc/figure/figure.h"
 #include <QColor>
 
 class Ellips : public Figure {

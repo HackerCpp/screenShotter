@@ -10,9 +10,11 @@
 #include <QSplitter>
 #include "inc/communicationwithserver.h"
 #include "inc/tabs/tabbase.h"
+#include <QSettings>
 
 class TabRegistration : public TabBase{
     Q_OBJECT
+    QSettings m_settings;
     CommunicationWithServer * m_server;
     QGroupBox * mainGroupBox;
     QVBoxLayout *groupBoxLayout;
@@ -26,7 +28,7 @@ public:
     void showRegistration();
     void showAutorization();
     void showEntryEmail();
-    QString readPassword();
+    QVariant readPassword();
     void connectServer();
 
 signals:

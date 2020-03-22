@@ -1,4 +1,4 @@
-#include "inc\figure\Ellips.h"
+#include "inc/figure/ellips.h"
 #include "QPainter"
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
@@ -44,6 +44,8 @@ bool Ellips::isPointColor(QPoint p){
     return false;
 }
 void Ellips::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setRenderHint(QPainter::HighQualityAntialiasing);
         pen->setCapStyle(Qt::RoundCap);
         painter->setPen(*pen);
         painter->setBrush(*brush);

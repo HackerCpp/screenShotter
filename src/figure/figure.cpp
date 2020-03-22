@@ -1,9 +1,11 @@
-#include "inc\figure\figure.h"
+#include "inc/figure/figure.h"
 #include <QCursor>
 #include "inc/screenscene.h"
 
 Figure::Figure(){
-    m_hoverCursor = new QCursor(QPixmap("cursors\\Move"));
+    m_curentPixmap = new QImage(2000,2000,QImage::Format_ARGB32);
+    m_doublePixmap = new QImage(2000,2000,QImage::Format_ARGB32);
+    m_hoverCursor = new QCursor(QPixmap(":/res/cursors/Move"));
     m_scaleX = 1;m_scaleY = 1;
     m_translateX = 0;m_translateY = 0;
     m_angX = 0;m_angY = 0;
@@ -15,10 +17,26 @@ Figure::Figure(){
     brushActive = new QBrush(QColor(100,255,0,200));
     penActive = new QPen(QColor(100,255,0,255));
     penActive->setWidth(2);
+    m_numberBtn = 1;
     m_zValue = 5;
     setZValue(5);
 }
+void Figure::run(){
 
+}
+void Figure::swapPixMap(){
+    QImage *ptr = m_curentPixmap;
+    m_curentPixmap = m_doublePixmap;
+    m_doublePixmap = ptr;
+    ptr = nullptr;
+    //scene()->update();
+}
+int Figure::getWidth(){
+    return pen->width() - 2;
+}
+void Figure::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+
+}
 int Figure::getPoint(QPointF p){
     for(int i_x = m_x+m_w/2 - 10;i_x<m_x+m_w/2+10;i_x++){
         for(int i_y =m_y+m_h/2-10;i_y < m_y+m_h/2+10;i_y++){
@@ -83,6 +101,7 @@ int Figure::getPoint(QPointF p){
             }
         }
     }
+    return 0;
 }
 bool Figure::isPointColor(QPoint p){
     ScreenScene *thisScene = dynamic_cast<ScreenScene*>(this->scene());
@@ -150,10 +169,11 @@ QRectF Figure::boundingRect() const{
     return QRectF(x, y, w, h);
 }
 void Figure::setColor(QColor color){
-    QGraphicsItem::prepareGeometryChange();
+    wait();
     pen->setColor(color);
     brush->setColor(color);
-    update();
+    this->setFocus();
+    start();
 }
 int Figure::positionForCursor(QPointF p){
     if(isPointColor(QPoint(p.x(),p.y()))){
@@ -221,20 +241,33 @@ int Figure::positionForCursor(QPointF p){
 
         return 1;
  }
+    return 0;
 }
 void Figure::setWidthLine(int width){
+    wait();
     QGraphicsItem::prepareGeometryChange();
     pen->setWidth(width+2);
     update();
+    this->setFocus();
+    start();
 }
 void Figure::enableBrush(){
+    wait();
     brush->setStyle(Qt::SolidPattern);
+    this->setFocus();
+    start();
 }
 void Figure::disableBrush(){
+    wait();
     brush->setStyle(Qt::NoBrush);
+    this->setFocus();
+    start();
 }
 void Figure::setActive(bool active){
+    wait();
     isActive = active;
     QGraphicsItem::prepareGeometryChange();
     update();
+    this->setFocus();
+    start();
 }

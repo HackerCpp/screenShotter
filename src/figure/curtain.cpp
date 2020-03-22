@@ -1,4 +1,4 @@
-#include "inc\figure\curtain.h"
+#include "inc/figure/curtain.h"
 #include "QPainter"
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
@@ -16,6 +16,7 @@ m_x =x;m_y = y;m_w = width;m_h = height;
     *this->pen = pen;
     close = true;
     prevPoints = QPointF(x,y);
+
 }
 bool Curtain::isPointColor(QPoint p){
     QImage image(scene()->width(),scene()->height(), QImage::Format_RGB32);
@@ -58,7 +59,8 @@ bool Curtain::isPointColor(QPoint p){
     return false;
 }
 void Curtain::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
-
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setRenderHint(QPainter::HighQualityAntialiasing);
         painter->setPen(*pen);
         painter->setBrush(*brush);
         painter->drawRect(QRect(m_x,m_y,m_w,m_h));
@@ -114,7 +116,6 @@ void Curtain::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     }
     if(isActive){
         QPointF p = prevPoints - event->scenePos();
-
         if(cursorPosition == 2){
             m_w -= p.x();
             m_h -= p.y();

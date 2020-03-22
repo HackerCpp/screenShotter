@@ -18,12 +18,14 @@ protected:
     QVBoxLayout * mainVBoxLayout;
     QLabel * headerLabelIcon,*headerLabelText;
     QPushButton * headerBtn;
+    QWidget *m_WidgetHeader;
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void controlPosition();
 public:
     TabBase();
+    ~TabBase();
 public slots:
     virtual void hideWin();
 };

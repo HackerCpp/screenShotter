@@ -8,6 +8,7 @@ void TabBase::setName(){
     headerLabelText->setObjectName("HeaderText");
     headerBtn->setObjectName("HeaderBtn");
     headerLabelIcon->setObjectName("HeaderIcon");
+    m_WidgetHeader->setObjectName("HeaderWidget");
 }
 
 
@@ -15,7 +16,11 @@ TabBase::TabBase(){
     m_size = QApplication::screens().at(0)->geometry();
     this->setWindowFlags(Qt::SplashScreen | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     mainVBoxLayout = new QVBoxLayout;
+    mainVBoxLayout->setMargin(0);
+    mainVBoxLayout->setSpacing(0);
     headerLayout = new QHBoxLayout;
+    m_WidgetHeader = new QWidget;
+    m_WidgetHeader->setLayout(headerLayout);
     headerLabelIcon = new QLabel();
 
     headerLabelText = new QLabel();
@@ -24,14 +29,17 @@ TabBase::TabBase(){
     headerLayout->addWidget(headerLabelText);
     headerLayout->addWidget(headerBtn);
     this->setLayout(mainVBoxLayout);
-    mainVBoxLayout->addLayout(headerLayout);
-    headerBtn->setFixedSize(25,25);
-    QBrush *br = new QBrush(QColor(25,25,112));
+    mainVBoxLayout->addWidget(m_WidgetHeader);
+    headerBtn->setFixedSize(60,30);
+
     connect(headerBtn, SIGNAL(clicked()), this, SLOT(hideWin()));
     setName();
 }
-void TabBase::hideWin(){
+TabBase::~TabBase(){
     this->deleteLater();
+}
+void TabBase::hideWin(){
+    this->hide();
 }
 void TabBase::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::LeftButton) {

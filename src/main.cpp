@@ -1,12 +1,15 @@
-#include "inc\mainwindow.h"
+#include "inc/mainwindow.h"
 #include <QApplication>
 #include <QFile>
-#include "inc/tabs/tabregistration.h"
+#include <QLibraryInfo>
 
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
+    QCoreApplication::setOrganizationName("kwork");
+    QCoreApplication::setApplicationName("screenShotter");
+    QApplication::setQuitOnLastWindowClosed(false);
     MainWindow w;
-    QFile File("css\\style.css");
+    QFile File(":/res/css/style.css");
     File.open(QFile::ReadOnly);
     QString StyleSheet = QLatin1String(File.readAll());
     qApp->setStyleSheet(StyleSheet);

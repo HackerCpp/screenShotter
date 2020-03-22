@@ -1,10 +1,44 @@
-#include "inc\figure\arrow.h"
+#include "inc/figure/arrow.h"
 #include "QPainter"
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include <QCursor>
 #include <QtMath>
 
+void Arrow::transform(){
+    if(!tail){
+        m_pointsBegin->data()[2].setY(-length + heightmin);
+        m_pointsBegin->data()[3].setY(-length + heightmax);
+        m_pointsBegin->data()[4].setY(-length);
+        m_pointsBegin->data()[5].setY(-length +heightmax);
+        m_pointsBegin->data()[6].setY(-length+heightmin);
+    }
+    if(tail){
+        m_pointsBegin->data()[2].setY(0 + heightmin);
+        m_pointsBegin->data()[3].setY(0 + heightmax);
+        m_pointsBegin->data()[4].setY(0);
+        m_pointsBegin->data()[5].setY(0 + heightmax);
+        m_pointsBegin->data()[6].setY(0 + heightmin);
+
+        m_pointsBegin->data()[0].setY(length);
+        m_pointsBegin->data()[1].setY(length);
+    }
+}
+void Arrow::updateP(){
+    transform();
+    if(qAbs(length) < 15){
+        m_pointsBegin->data()[2].setX(length);
+        m_pointsBegin->data()[3].setX(-length);
+        m_pointsBegin->data()[5].setX(length);
+        m_pointsBegin->data()[6].setX(-length);
+    }
+    else{
+        m_pointsBegin->data()[2].setX(widthmin);
+        m_pointsBegin->data()[3].setX(widthmax);
+        m_pointsBegin->data()[5].setX(-widthmax);
+        m_pointsBegin->data()[6].setX(-widthmin);
+    }
+}
 void Arrow::transformation(QGraphicsSceneMouseEvent *event){
     QPointF p = prevPoints - event->scenePos();
     m_w -= p.x();
@@ -49,11 +83,11 @@ void Arrow::transformation(QGraphicsSceneMouseEvent *event){
         m_pointsBegin->data()[2].setY(-lengthA + heightmin);
         m_pointsBegin->data()[3].setY(-lengthA +heightmax);
         m_pointsBegin->data()[4].setY(-lengthA);
-        m_pointsBegin->data()[5].setY(-lengthA +heightmin);
-        m_pointsBegin->data()[6].setY(-lengthA+heightmax);
+        m_pointsBegin->data()[5].setY(-lengthA +heightmax);
+        m_pointsBegin->data()[6].setY(-lengthA+heightmin);
         m_pointsBegin->data()[2].setX(widthmin);
-        m_pointsBegin->data()[3].setX(-widthmax);
-        m_pointsBegin->data()[5].setX(widthmax);
+        m_pointsBegin->data()[3].setX(widthmax);
+        m_pointsBegin->data()[5].setX(-widthmax);
         m_pointsBegin->data()[6].setX(-widthmin);
     }
 }
@@ -64,11 +98,11 @@ void Arrow::transformationTwo(QGraphicsSceneMouseEvent *event){
     m_x -= p.x();
     m_y -= p.y();
     if(!tail){
-        m_pointsBegin->data()[2].setY(0 + 14);
-        m_pointsBegin->data()[3].setY(0 +15);
+        m_pointsBegin->data()[2].setY(0 + heightmin);
+        m_pointsBegin->data()[3].setY(0 + heightmax);
         m_pointsBegin->data()[4].setY(0);
-        m_pointsBegin->data()[5].setY(0 +15);
-        m_pointsBegin->data()[6].setY(0+14);
+        m_pointsBegin->data()[5].setY(0 + heightmax);
+        m_pointsBegin->data()[6].setY(0 + heightmin);
 
         m_pointsBegin->data()[0].setY(length);
         m_pointsBegin->data()[1].setY(length);
@@ -107,9 +141,11 @@ m_x =x;m_y = y;m_w = width;m_h = height;
     m_pointsBegin->data()[4] = QPoint(0,0);
     m_pointsBegin->data()[5] = QPoint(0,-10);
     m_pointsBegin->data()[6] = QPoint(0,-10);
-    widthmin = 5;widthmax = 10;
-    heightmin = 14;
-    heightmax = 15;
+    int widthP = pen.width();
+    widthmax = widthP +10;
+    widthmin = widthmax/2;
+    heightmax = widthP + 15;
+    heightmin = heightmax - 5;
 }
 bool Arrow::isPointColor(QPoint p){
     QImage image(scene()->width(),scene()->height(), QImage::Format_RGB32);
@@ -141,8 +177,21 @@ bool Arrow::isPointColor(QPoint p){
     }
     return false;
 }
+void Arrow::setWidthLine(int width){
+    widthmax = width +10;
+    widthmin = widthmax/2;
+    heightmax = width + 15;
+    heightmin = heightmax - 5;
+    updateP();
+}
+int Arrow::getWidth(){
+   return  widthmax - 10;
+}
 void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
     //painter->drawRect(boundingRect());
+
+        painter->setRenderHint(QPainter::Antialiasing);
+        painter->setRenderHint(QPainter::HighQualityAntialiasing);
         painter->translate(m_translateX,m_translateY);
         painter->rotate(m_angX);
         brush->setColor(pen->color());
@@ -153,17 +202,22 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*){
         if(isActive){
           painter->setPen(*penActive);
           painter->setBrush(*brushActive);
-          painter->drawEllipse(m_pointsBegin->data()[4].x()-5,m_pointsBegin->data()[4].y()-5,5,5);
-          painter->drawEllipse(m_pointsBegin->data()[0].x()-5,m_pointsBegin->data()[0].x()-5,5,5);
-          painter->drawLine(m_pointsBegin->data()[4].x()+((m_pointsBegin->data()[0].x()-m_pointsBegin->data()[4].x())/2)-5,
+          if(!tail){
+            painter->drawEllipse(m_pointsBegin->data()[4].x()-5,m_pointsBegin->data()[4].y()-5,5,5);
+            painter->drawEllipse(m_pointsBegin->data()[0].x()-5,m_pointsBegin->data()[0].x()-5,5,5);
+          }
+          else{
+            //painter->drawEllipse(m_pointsBegin->data()[0].x()-5,m_pointsBegin->data()[0].x()-5,20,20);
+            painter->drawEllipse(m_pointsBegin->data()[4].x()-5,m_pointsBegin->data()[4].y()-5,5,5);
+          }
+          /*painter->drawLine(m_pointsBegin->data()[4].x()+((m_pointsBegin->data()[0].x()-m_pointsBegin->data()[4].x())/2)-5,
                             m_pointsBegin->data()[4].y()+((m_pointsBegin->data()[0].y()-m_pointsBegin->data()[4].y())/2)-5,
                             m_pointsBegin->data()[4].x()+((m_pointsBegin->data()[0].x()-m_pointsBegin->data()[4].x())/2)+5,
                             m_pointsBegin->data()[4].y()+((m_pointsBegin->data()[0].y()-m_pointsBegin->data()[4].y())/2)+5);
           painter->drawLine(m_pointsBegin->data()[4].x()+((m_pointsBegin->data()[0].x()-m_pointsBegin->data()[4].x())/2)-5,
                             m_pointsBegin->data()[4].y()+((m_pointsBegin->data()[0].y()-m_pointsBegin->data()[4].y())/2)+5,
                             m_pointsBegin->data()[4].x()+((m_pointsBegin->data()[0].x()-m_pointsBegin->data()[4].x())/2)+5,
-                            m_pointsBegin->data()[4].y()+((m_pointsBegin->data()[0].y()-m_pointsBegin->data()[4].y())/2)-5);
-
+                            m_pointsBegin->data()[4].y()+((m_pointsBegin->data()[0].y()-m_pointsBegin->data()[4].y())/2)-5);*/
         }
 }
 
